@@ -1,49 +1,68 @@
+using System;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private StateSwitch _stateSwitch;
     [SerializeField] private Button[] _buttons;
-    [SerializeField] private float _buttonsSize;
-    [SerializeField] private float _appearanceDuration;
-    [SerializeField] private float _interval;
+    private MainMenuConfig _mainMenuConfig;
+    private SceneLoader _sceneLoader;
 
-    public void Show()
+    private void OnValidate()
+    {
+        if(_buttons == null)
+            throw new ArgumentNullException(nameof(_buttons), "Buttons cannot be null");
+    }
+
+    public void Initialize(MainMenuConfig mainMenuConfig)
+    {
+        _sceneLoader = FindAnyObjectByType<SceneLoader>();
+        _mainMenuConfig = mainMenuConfig;
+    }
+
+    private void OnEnable()
+    {
+        Show();
+    }
+
+    private void Show()
     {
         Sequence animation = DOTween.Sequence();
 
-        animation.Append(_buttons[0].transform.DOScale(_buttonsSize, _appearanceDuration).From(0).SetEase(Ease.OutBounce)).
-                  AppendInterval(_interval).
-                  Append(_buttons[1].transform.DOScale(_buttonsSize, _appearanceDuration).From(0).SetEase(Ease.OutBounce)).
-                  AppendInterval(_interval).
-                  Append(_buttons[2].transform.DOScale(_buttonsSize, _appearanceDuration).From(0).SetEase(Ease.OutBounce));
+        animation.AppendInterval(2.1f).
+                  Append(_buttons[0].transform.DOScale(_mainMenuConfig.ButtonsSize, _mainMenuConfig.AppearanceDuration).From(0).SetEase(Ease.OutBounce)).
+                  AppendInterval(_mainMenuConfig.Interval).
+                  Append(_buttons[1].transform.DOScale(_mainMenuConfig.ButtonsSize, _mainMenuConfig.AppearanceDuration).From(0).SetEase(Ease.OutBounce)).
+                  AppendInterval(_mainMenuConfig.Interval).
+                  Append(_buttons[2].transform.DOScale(_mainMenuConfig.ButtonsSize, _mainMenuConfig.AppearanceDuration).From(0).SetEase(Ease.OutBounce));
 
     }
 
-    public void Hide()
+    private IEnumerator Hide(string openingSceneName)
     {
         Sequence animation = DOTween.Sequence();
 
-        animation.Append(_buttons[0].transform.DOScale(0, _appearanceDuration).From(_buttonsSize).SetEase(Ease.InBack)).
-                  AppendInterval(_interval).
-                  Append(_buttons[1].transform.DOScale(0, _appearanceDuration).From(_buttonsSize).SetEase(Ease.InBack)).
-                  AppendInterval(_interval).
-                  Append(_buttons[2].transform.DOScale(0, _appearanceDuration).From(_buttonsSize).SetEase(Ease.InBack))
-                  .AppendCallback(() => gameObject.SetActive(false));
+        yield return animation.Append(_buttons[0].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
+                AppendInterval(_mainMenuConfig.Interval).
+                Append(_buttons[1].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
+                AppendInterval(_mainMenuConfig.Interval).
+                Append(_buttons[2].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
+                AppendInterval(1f).
+                AppendCallback(() => Coroutines.StartRoutine(_sceneLoader.LoadScene(openingSceneName, _mainMenuConfig.LoadingTime)));
     }
 
     public void Play()
     {
         Debug.Log("LoadLevel");
         Debug.Log("LoadCompleted");
-        _stateSwitch.EnterIn<LevelInitializationState>();
+        StartCoroutine(Hide(_mainMenuConfig.GameplaySceneName));
     }
 
     public void OpenSettings()
     {
-        _stateSwitch.EnterIn<SettingsMenuState>();
+        StartCoroutine(Hide(_mainMenuConfig.SettingsSceneName));
     }
 
     public void Quit()
