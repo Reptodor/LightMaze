@@ -1,30 +1,61 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Image))]
 public class LoadingMenu : MonoBehaviour
 {
-    [SerializeField] private Image _loadingImage;
-    private Sequence _animation;
+    [SerializeField] private Image _background;
+    [SerializeField] private TextMeshProUGUI _loadingText;
+    private Sequence _appearAnimation;
+    private Sequence _disapperAnimation;
+    private Tween _textAnimation;
+    private bool _isAppearing;
+
+    public bool IsAppearing => _isAppearing;
 
     private void OnValidate()
     {
-        if(_loadingImage == null)
-            throw new ArgumentNullException(nameof(_loadingImage), "Loading image cannot be null");
+        if(_background == null)
+            _background = GetComponent<Image>();
+
+        if(_loadingText == null)
+            _loadingText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void OnEnable()
     {
-        _animation = DOTween.Sequence();
-
-        _animation.Append(_loadingImage.transform.DORotateQuaternion(Quaternion.Euler(0, 0, 181), 1f).From(Quaternion.Euler(0, 0, 1)))
-                 .Append(_loadingImage.transform.DORotateQuaternion(Quaternion.Euler(0, 0, 360), 1f))
-                 .SetLoops(-1, LoopType.Restart);
+        SetTextAnimation();
     }
 
     private void OnDisable()
     {
-        _animation.Kill();
+        _textAnimation.Kill();
+        _disapperAnimation.Kill();
+    }
+
+    public void Appear()
+    {
+        _isAppearing = true;
+
+        _appearAnimation = DOTween.Sequence();
+
+        _appearAnimation.Append(_background.DOFade(1, 1).From(0).SetEase(Ease.Linear))
+                        .AppendCallback(() => _isAppearing = false);
+    }
+
+    public void Disapear()
+    {
+        _disapperAnimation = DOTween.Sequence();
+
+        _disapperAnimation.Append(_background.DOFade(0, 1).From(1).SetEase(Ease.Linear))
+                          .Join(_loadingText.DOFade(0, 1)).SetEase(Ease.Linear)
+                          .AppendCallback(() => gameObject.SetActive(false));
+    }
+
+    private void SetTextAnimation()
+    {
+        _textAnimation = _loadingText.DOFade(0.08f, 1).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
     }
 }

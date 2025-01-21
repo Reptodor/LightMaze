@@ -14,6 +14,9 @@ public class Bootstrap : MonoBehaviour
 
         if(_loadingMenu == null)
             throw new ArgumentNullException(nameof(_loadingMenu), "Loading menu cannot be null");
+
+        if(_sceneLoadConfig == null)
+            throw new ArgumentNullException(nameof(_sceneLoadConfig), "Scene load config cannot be null");
     }
 
     private void Awake()

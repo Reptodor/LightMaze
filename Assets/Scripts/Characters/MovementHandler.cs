@@ -2,30 +2,29 @@ using UnityEngine;
 
 public class MovementHandler
 {
+    private readonly MovementConfig _movementConfig;
     private readonly Rigidbody2D _rigidbody2D;
-    private float _speed;
+    private readonly AudioSource _audioSource;
 
-    public MovementHandler(Rigidbody2D rigidbody2D)
+    public MovementHandler(MovementConfig movementConfig, Rigidbody2D rigidbody2D, AudioSource audioSource)
     {
+        _movementConfig = movementConfig;
         _rigidbody2D = rigidbody2D;
-    }
-
-    public void SetValues(float speed)
-    {
-        _speed = speed;
+        _audioSource = audioSource;
     }
 
     public bool IsMoving()
     {
         if(_rigidbody2D.velocity != Vector2.zero)
-        {
             return true;
-        }
+
+        _audioSource.clip = _movementConfig.AudioClip;
+        _audioSource.Play();
         return false;
     }
 
     public void HandleMovement(Vector2 moveDirection)
     {
-        _rigidbody2D.velocity = moveDirection * _speed;
+        _rigidbody2D.velocity = moveDirection * _movementConfig.Speed;
     }
 }

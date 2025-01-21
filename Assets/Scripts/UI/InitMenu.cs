@@ -8,6 +8,7 @@ public class InitMenu : MonoBehaviour
     private SceneLoadConfig _sceneLoadConfig;
     private SceneLoader _sceneLoader;
     private Tween _textAnimation;
+    private bool _isActive;
 
     public void Initialize(SceneLoadConfig initSceneConfig)
     {
@@ -17,6 +18,7 @@ public class InitMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        _isActive = true;
         AnimateText();
     }
 
@@ -27,9 +29,11 @@ public class InitMenu : MonoBehaviour
 
     private void Update()
     {
-        if(Input.anyKey)
+        if(Input.anyKeyDown && _isActive)
+        {
+            _isActive = false;
             Coroutines.StartRoutine(_sceneLoader.LoadScene(_sceneLoadConfig.OpeningSceneName, _sceneLoadConfig.LoadingTime));
-        
+        }
     }
 
     private void AnimateText()

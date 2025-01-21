@@ -1,16 +1,15 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour, IDamagable
 {
+    [SerializeField] private AudioSource _audioSource;
     private bool _isInitialized;
-
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    private AnimationHandler _animationHandler;
 
     [Header("Animation")]
     [SerializeField] private Animator _animator;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    private AnimationHandler _animationHandler;
     private AnimationSwitchingHandler _animationSwitchingHandler;
 
     [Header("Movement")]
@@ -23,12 +22,20 @@ public class Player : MonoBehaviour, IDamagable
     [Header("Combat")]
     private MeleeCombatHandler _meleeCombatHandler;
 
+    [Header("Bag")]
+    private BagHandler _bagHandler;
+
+    public BagHandler BagHandler => _bagHandler;
+
     [Header("Health")]
     private Health _health;
     public Health Health => _health;
 
     private void OnValidate()
     {
+        if(_audioSource == null)
+            _audioSource = GetComponent<AudioSource>();
+
         if(_spriteRenderer == null)
             _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -39,24 +46,25 @@ public class Player : MonoBehaviour, IDamagable
             _animator = GetComponentInChildren<Animator>();
     }
 
-    public void Initialize(HealthConfig healthConfig, HealthView healthView, MeleeCombatConfig meleeCombatConfig, float movementSpeed)
+    public void Initialize(MovementConfig movementConfig, HealthConfig healthConfig, HealthView healthView, MeleeCombatConfig meleeCombatConfig, BagConfig bagConfig, GameObject spikesTilemap)
     {
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
-        InitializeMovement(movementSpeed);
+        InitializeMovement(movementConfig);
         _meleeCombatHandler = new MeleeCombatHandler(meleeCombatConfig);
+        _bagHandler = new BagHandler(bagConfig, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _meleeCombatHandler, _animationSwitchingHandler, _orientationHandler);
         InitializeHealth(healthConfig, healthView);
+
         _isInitialized = true;
         OnEnable();
     }
 
-    private void InitializeMovement(float movementSpeed)
+    private void InitializeMovement(MovementConfig movementConfig)
     {
         _playerInputHandler = new PlayerInputHandler();
-        _movementHandler = new MovementHandler(_rigidbody2D);
+        _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _audioSource);
         _orientationHandler = new OrientationHandler();
         _rotationHandler = new RotationHandler(transform);
-        _movementHandler.SetValues(movementSpeed);
     }
 
     private void InitializeHealth(HealthConfig healthConfig, HealthView healthView)

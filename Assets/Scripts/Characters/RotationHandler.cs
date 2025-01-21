@@ -13,11 +13,11 @@ public class RotationHandler
     {
         if(velocityDirection.x > 0)
         {   
-            _transform.rotation = Quaternion.Euler(0, 180, 0);
+            _transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
         if(velocityDirection.x < 0)
         {
-            _transform.rotation = Quaternion.Euler(0, 0, 0);
+            _transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

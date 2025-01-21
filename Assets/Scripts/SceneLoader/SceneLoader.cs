@@ -15,6 +15,9 @@ public class SceneLoader : MonoBehaviour
     public IEnumerator LoadScene(string sceneName, float loadingTime)
     {
         _loadingMenu.gameObject.SetActive(true);
+        _loadingMenu.Appear();
+
+        yield return new WaitWhile(() => _loadingMenu.IsAppearing == true);
 
         if(_currentSceneName != null)
             SceneManager.UnloadSceneAsync(_currentSceneName);
@@ -25,6 +28,6 @@ public class SceneLoader : MonoBehaviour
 
         yield return new WaitForSeconds(loadingTime);
 
-        _loadingMenu.gameObject.SetActive(false);
+        _loadingMenu.Disapear();
     }
 }
