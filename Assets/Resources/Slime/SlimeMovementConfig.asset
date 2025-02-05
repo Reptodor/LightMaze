@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdd79703fec04a86b1bb450c54d4e23, type: 3}
+  m_Name: SlimeMovementConfig
+  m_EditorClassIdentifier: 
+  _audioClip: {fileID: 8300000, guid: 4e9fa7e77477d4a7f88b68f3d5d81522, type: 3}
+  _speed: 2

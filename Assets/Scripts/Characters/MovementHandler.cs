@@ -6,11 +6,20 @@ public class MovementHandler
     private readonly Rigidbody2D _rigidbody2D;
     private readonly AudioSource _audioSource;
 
+    private float _speed;
+    public float Speed => _movementConfig.Speed;
+
     public MovementHandler(MovementConfig movementConfig, Rigidbody2D rigidbody2D, AudioSource audioSource)
     {
         _movementConfig = movementConfig;
         _rigidbody2D = rigidbody2D;
         _audioSource = audioSource;
+        SetSpeed(_movementConfig.Speed);
+    }
+
+    public void SetSpeed(float value)
+    {
+        _speed = value;
     }
 
     public bool IsMoving()
@@ -25,6 +34,6 @@ public class MovementHandler
 
     public void HandleMovement(Vector2 moveDirection)
     {
-        _rigidbody2D.velocity = moveDirection * _movementConfig.Speed;
+        _rigidbody2D.velocity = moveDirection * _speed;
     }
 }

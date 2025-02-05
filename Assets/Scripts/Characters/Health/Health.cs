@@ -9,14 +9,18 @@ public class Health
     private HealthView _healthView;
     private HealthModel _healthModel;
     private SpriteRenderer _spriteRenderer;
+    private SceneLoader _sceneLoader;
+    private CameraHandler _cameraHandler;
     private Coroutine _coroutine;
+    private AudioSource _audioSource;
     private bool _isAlive = true;
 
     public bool IsAlive => _isAlive;
 
     public event Action Died;
 
-    public Health(HealthConfig healthConfig, HealthView healthView, SpriteRenderer spriteRenderer)
+    public Health(HealthConfig healthConfig, HealthView healthView, SpriteRenderer spriteRenderer,
+                  SceneLoader sceneLoader, CameraHandler cameraHandler, AudioSource audioSource)
     {
         if (healthConfig == null)
             throw new ArgumentNullException(nameof(healthConfig), "Health config cannot be null");
@@ -30,6 +34,9 @@ public class Health
         _healthView = healthView;
         _healthConfig = healthConfig;
         _spriteRenderer = spriteRenderer;
+        _sceneLoader = sceneLoader;
+        _cameraHandler = cameraHandler;
+        _audioSource = audioSource;
         _healthModel = new HealthModel(healthConfig);
     }
 
@@ -48,9 +55,10 @@ public class Health
         if(damage <= 0)
             throw new ArgumentOutOfRangeException(nameof(damage), "Damage must be greater than zero");
         
-        // _healthConfig.AudioSource?.Play();
+        _audioSource.Play();
         AnimateHit();
         _healthModel.ReduceValue(damage);
+        _cameraHandler.Shake();
 
         if(_healthModel.CurrentValue <= 0)
             _coroutine = Coroutines.StartRoutine(Die());
@@ -72,6 +80,7 @@ public class Health
 
         yield return new WaitForSeconds(_healthConfig.DeathTime);
 
+        _sceneLoader.RestartScene();
         Coroutines.StopRoutine(_coroutine);
     }
 }

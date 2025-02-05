@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a50ed2b958d2495c874249396083248, type: 3}
   m_Name: ExitConfig
   m_EditorClassIdentifier: 
-  _nextSceneName: MainMenuScene
+  _nextSceneName: SecondLevelScene
   _loadingTime: 4

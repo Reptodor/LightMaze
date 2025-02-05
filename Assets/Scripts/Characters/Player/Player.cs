@@ -3,8 +3,11 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour, IDamagable
 {
-    [SerializeField] private AudioSource _audioSource;
     private bool _isInitialized;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioSource _hitAudioSource;
 
     [Header("Animation")]
     [SerializeField] private Animator _animator;
@@ -19,8 +22,7 @@ public class Player : MonoBehaviour, IDamagable
     private OrientationHandler _orientationHandler;
     private RotationHandler _rotationHandler;
 
-    [Header("Combat")]
-    private MeleeCombatHandler _meleeCombatHandler;
+    public MovementHandler MovementHandler => _movementHandler;
 
     [Header("Bag")]
     private BagHandler _bagHandler;
@@ -46,15 +48,16 @@ public class Player : MonoBehaviour, IDamagable
             _animator = GetComponentInChildren<Animator>();
     }
 
-    public void Initialize(MovementConfig movementConfig, HealthConfig healthConfig, HealthView healthView, MeleeCombatConfig meleeCombatConfig, BagConfig bagConfig, GameObject spikesTilemap)
+    public void Initialize(MovementConfig movementConfig, HealthConfig healthConfig,
+                           HealthView healthView,
+                           BagConfig bagConfig, GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler)
     {
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
         InitializeMovement(movementConfig);
-        _meleeCombatHandler = new MeleeCombatHandler(meleeCombatConfig);
         _bagHandler = new BagHandler(bagConfig, spikesTilemap);
-        _animationHandler = new AnimationHandler(_movementHandler, _meleeCombatHandler, _animationSwitchingHandler, _orientationHandler);
-        InitializeHealth(healthConfig, healthView);
-
+        _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
+        InitializeHealth(healthConfig, healthView, sceneLoader, cameraHandler);
+        
         _isInitialized = true;
         OnEnable();
     }
@@ -67,9 +70,9 @@ public class Player : MonoBehaviour, IDamagable
         _rotationHandler = new RotationHandler(transform);
     }
 
-    private void InitializeHealth(HealthConfig healthConfig, HealthView healthView)
+    private void InitializeHealth(HealthConfig healthConfig, HealthView healthView, SceneLoader sceneLoader, CameraHandler cameraHandler)
     {
-        _health = new Health(healthConfig, healthView, _spriteRenderer);
+        _health = new Health(healthConfig, healthView, _spriteRenderer, sceneLoader, cameraHandler, _hitAudioSource);
     }
 
     private void OnEnable()
@@ -93,14 +96,12 @@ public class Player : MonoBehaviour, IDamagable
             return;
 
         if(!_health.IsAlive)
+        {
+            _audioSource.enabled = false;
             return;
+        }
 
         _animationHandler.HandleAnimations(_playerInputHandler.GetInputDirection());
-
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            _meleeCombatHandler.Attack();
-        }
 
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -113,7 +114,7 @@ public class Player : MonoBehaviour, IDamagable
         if(!_isInitialized)
             return;
 
-        if(!_health.IsAlive || _meleeCombatHandler.IsAttacking)
+        if(!_health.IsAlive)
         {
             _movementHandler.HandleMovement(Vector2.zero);
             return;

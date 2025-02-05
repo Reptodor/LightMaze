@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9517107c5cb564bf6896867b6822c8f3, type: 3}
+  m_Name: CameraFollowingConfig
+  m_EditorClassIdentifier: 
+  _freePosition: {x: 5.82, y: -3, z: -2}
+  _animationDuration: 1
+  _followingOrthoSize: 8
+  _unfollowingOrthoSize: 58

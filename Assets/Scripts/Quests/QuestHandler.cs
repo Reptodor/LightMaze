@@ -42,6 +42,7 @@ public class QuestHandler : MonoBehaviour
     private void OnDisable()
     {
         _questAnimationHandler.AppearingAnimationCompleted -= ChangeQuest;
+        _questAnimationHandler.OnDisable();
     }
 
     private void Update()

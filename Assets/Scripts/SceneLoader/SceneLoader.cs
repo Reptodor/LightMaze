@@ -12,6 +12,11 @@ public class SceneLoader : MonoBehaviour
         _loadingMenu = loadingMenu;
     }
 
+    public void RestartScene()
+    {
+        StartCoroutine(LoadScene(_currentSceneName, 4f));
+    }
+
     public IEnumerator LoadScene(string sceneName, float loadingTime)
     {
         _loadingMenu.gameObject.SetActive(true);

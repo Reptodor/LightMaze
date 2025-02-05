@@ -5,9 +5,9 @@ using UnityEngine.Rendering.Universal;
 public class Key : MonoBehaviour
 {
     [SerializeField] private Light2D _light2D;
-    private Sequence _animation;
-
-    public Light2D Light2D => _light2D;
+    private ShakeAnimationHandler _shakeAnimationHandler;
+    private Tween _enableLightTween;
+    private bool _isInitialized;
 
     private void OnValidate()
     {
@@ -15,26 +15,35 @@ public class Key : MonoBehaviour
             _light2D = GetComponent<Light2D>();
     }
 
+    public void Initialize(ShakeAnimationConfig shakeAnimationConfig)
+    {
+        _shakeAnimationHandler = new ShakeAnimationHandler(shakeAnimationConfig, transform);
+
+        _isInitialized = true;
+        OnEnable();
+    }
+
     private void OnEnable()
     {
-        StartShakeAnimation();
+        if(_isInitialized)
+            _shakeAnimationHandler.Start();
     }
 
     private void OnDisable()
     {
-        StopShakeAnimation();
+        _shakeAnimationHandler.Stop();
+        _enableLightTween.Kill();
     }
 
-    private void StartShakeAnimation()
+    public void EnableLight()
     {
-        _animation = DOTween.Sequence();
-
-        _animation.Append(transform.DOPunchPosition(Vector2.right * 0.10f, 0.4f)).AppendInterval(3f).SetLoops(-1, LoopType.Restart);
+        _light2D.enabled = true;
+        _enableLightTween = DOTween.To(SetLightIntesity, 0, 1f, 1f);
     }
 
-    private void StopShakeAnimation()
+    private void SetLightIntesity(float intensity)
     {
-        _animation.Kill();
+        _light2D.intensity = intensity;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class CameraHandler : MonoBehaviour
@@ -6,6 +7,7 @@ public class CameraHandler : MonoBehaviour
     private CameraHandlerConfig _cameraHandlerConfig;
     private CameraMovementHandler _cameraMovementHandler;
     private CameraFollowingHandler _cameraFollowingHandler;
+    private Sequence _animation;
 
     private bool _isInitialized = false;
 
@@ -25,6 +27,11 @@ public class CameraHandler : MonoBehaviour
         _isInitialized = true;
     }
 
+    private void OnDisable()
+    {
+        _animation.Kill();
+    }
+
     private void Update()
     {
         if(!_isInitialized)
@@ -36,5 +43,12 @@ public class CameraHandler : MonoBehaviour
         {
             _cameraFollowingHandler.Switch();
         }
+    }
+
+    public void Shake()
+    {
+        _animation = DOTween.Sequence();
+
+        _animation.Append(transform.DOPunchPosition(Vector2.right * 0.4f, 0.05f));
     }
 }
