@@ -45,6 +45,11 @@ public class CameraHandler : MonoBehaviour
         }
     }
 
+    public void Switch()
+    {
+        _cameraFollowingHandler.Switch();
+    }
+
     public void Shake()
     {
         _animation = DOTween.Sequence();

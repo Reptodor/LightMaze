@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerInputHandler
+public class DesktopInputHandler : IInput
 {
     private float _horizontalInput;
     private float _verticalInput;

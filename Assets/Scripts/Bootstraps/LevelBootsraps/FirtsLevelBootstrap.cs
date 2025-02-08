@@ -21,6 +21,10 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private BagConfig _bagConfig;
     [SerializeField] private GameObject _spikesTilemap;
 
+    [Header("MobileComponents")]
+    [SerializeField] private Joystick _joystick;
+    [SerializeField] private Canvas _mobileCanvas;
+
     [Header("Torches")]
     [SerializeField] private HandTorch _baseTorch;
     [SerializeField] private List<GroundTorch> _baseGroundTorches;
@@ -65,7 +69,16 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _player.Initialize(_movementConfig, _healthConfig, _healthView, _bagConfig, _spikesTilemap, _sceneLoader, _cameraHandler);
+        IInput input = new DesktopInputHandler();
+        _mobileCanvas.gameObject.SetActive(false);
+
+        if(SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            _mobileCanvas.gameObject.SetActive(true);
+            input = new MobileInputHandler(_joystick);
+        }
+
+        _player.Initialize(_movementConfig, _healthConfig, _healthView, _bagConfig, _spikesTilemap, _sceneLoader, _cameraHandler, input);
 
         yield return null;
 

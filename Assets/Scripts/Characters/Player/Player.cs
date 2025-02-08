@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IDamagable
     [Header("Movement")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
     private MovementHandler _movementHandler;
-    private PlayerInputHandler _playerInputHandler;
+    private IInput _input;
     private OrientationHandler _orientationHandler;
     private RotationHandler _rotationHandler;
 
@@ -49,11 +49,11 @@ public class Player : MonoBehaviour, IDamagable
     }
 
     public void Initialize(MovementConfig movementConfig, HealthConfig healthConfig,
-                           HealthView healthView,
-                           BagConfig bagConfig, GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler)
+                           HealthView healthView, BagConfig bagConfig, GameObject spikesTilemap,
+                           SceneLoader sceneLoader, CameraHandler cameraHandler, IInput input)
     {
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
-        InitializeMovement(movementConfig);
+        InitializeMovement(movementConfig, input);
         _bagHandler = new BagHandler(bagConfig, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
         InitializeHealth(healthConfig, healthView, sceneLoader, cameraHandler);
@@ -62,9 +62,9 @@ public class Player : MonoBehaviour, IDamagable
         OnEnable();
     }
 
-    private void InitializeMovement(MovementConfig movementConfig)
+    private void InitializeMovement(MovementConfig movementConfig, IInput input)
     {
-        _playerInputHandler = new PlayerInputHandler();
+        _input = input;
         _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _audioSource);
         _orientationHandler = new OrientationHandler();
         _rotationHandler = new RotationHandler(transform);
@@ -101,7 +101,7 @@ public class Player : MonoBehaviour, IDamagable
             return;
         }
 
-        _animationHandler.HandleAnimations(_playerInputHandler.GetInputDirection());
+        _animationHandler.HandleAnimations(_input.GetInputDirection());
 
         if(Input.GetKeyDown(KeyCode.P))
         {
@@ -120,8 +120,8 @@ public class Player : MonoBehaviour, IDamagable
             return;
         }
         
-        _movementHandler.HandleMovement(_playerInputHandler.GetInputDirection().normalized);
-        _rotationHandler.HandleRotation(_playerInputHandler.GetInputDirection());
+        _movementHandler.HandleMovement(_input.GetInputDirection().normalized);
+        _rotationHandler.HandleRotation(_input.GetInputDirection());
     }
 
     private void OnDied()

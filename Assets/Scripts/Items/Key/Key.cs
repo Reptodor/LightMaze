@@ -54,7 +54,7 @@ public class Key : MonoBehaviour
         {
             player.BagHandler.AddKey(1);
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

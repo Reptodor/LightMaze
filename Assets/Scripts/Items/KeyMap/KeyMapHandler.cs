@@ -34,7 +34,7 @@ public class KeyMapHandler : MonoBehaviour
         {
             foreach(Key key in _keys)
             {
-                key.EnableLight();
+                key?.EnableLight();
             }
 
             Destroy(gameObject);
