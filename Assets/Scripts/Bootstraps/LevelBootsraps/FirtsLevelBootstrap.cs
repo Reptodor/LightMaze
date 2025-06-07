@@ -15,10 +15,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Player components")]
     [SerializeField] private Player _player;
-    [SerializeField] private MovementConfig _movementConfig;
     [SerializeField] private HealthView _healthView;
-    [SerializeField] private HealthConfig _healthConfig;
-    [SerializeField] private BagConfig _bagConfig;
     [SerializeField] private GameObject _spikesTilemap;
 
     [Header("MobileComponents")]
@@ -33,7 +30,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Exit")]
     [SerializeField] private ExitHandler _exitHandler;
-    [SerializeField] private ExitHandlerConfig _exitHandlerConfig;
     private SceneLoader _sceneLoader;
 
     [Header("Quests")]
@@ -69,16 +65,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        IInput input = new DesktopInputHandler();
-        _mobileCanvas.gameObject.SetActive(false);
-
-        if(SystemInfo.deviceType == DeviceType.Handheld)
-        {
-            _mobileCanvas.gameObject.SetActive(true);
-            input = new MobileInputHandler(_joystick);
-        }
-
-        _player.Initialize(_movementConfig, _healthConfig, _healthView, _bagConfig, _spikesTilemap, _sceneLoader, _cameraHandler, input);
+        _player.Initialize(_healthView, _spikesTilemap, _sceneLoader, _cameraHandler, ChooseAndGetInputSystem());
 
         yield return null;
 
@@ -86,7 +73,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        foreach(var baseGroundTorch in _baseGroundTorches)
+        foreach (var baseGroundTorch in _baseGroundTorches)
         {
             baseGroundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
 
@@ -99,14 +86,14 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _exitHandler.Initialize(_exitHandlerConfig, _sceneLoader, _questHandler);
+        _exitHandler.Initialize(_sceneLoader, _questHandler);
 
         yield return null;
 
-        foreach(Key key in Keys)
+        foreach (Key key in Keys)
         {
             key.Initialize(ShakeAnimationConfig);
-            
+
             yield return null;
         }
 
@@ -118,7 +105,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        if(SystemInfo.deviceType == DeviceType.Desktop)
+        if (SystemInfo.deviceType == DeviceType.Desktop)
         {
             _tutorial?.transform.DOScale(7, 1).From(0).SetEase(Ease.OutBounce);
             _flameBoostKey.gameObject.SetActive(true);
@@ -128,7 +115,21 @@ public class FirtsLevelBootstrap : MonoBehaviour
         }
         else
         {
-            _tutorial.gameObject.SetActive(false); 
+            _tutorial.gameObject.SetActive(false);
         }
+    }
+
+    private IInput ChooseAndGetInputSystem()
+    {
+        IInput input = new DesktopInputHandler();
+        _mobileCanvas.gameObject.SetActive(false);
+
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            _mobileCanvas.gameObject.SetActive(true);
+            input = new MobileInputHandler(_joystick);
+        }
+
+        return input;
     }
 }

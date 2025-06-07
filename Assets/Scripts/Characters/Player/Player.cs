@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IDamagable
 
     [Header("Movement")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
+    [SerializeField] private MovementConfig _movementConfig;
     private MovementHandler _movementHandler;
     private IInput _input;
     private OrientationHandler _orientationHandler;
@@ -25,11 +26,13 @@ public class Player : MonoBehaviour, IDamagable
     public MovementHandler MovementHandler => _movementHandler;
 
     [Header("Bag")]
+    [SerializeField] private BagConfig _bagConfig;
     private BagHandler _bagHandler;
 
     public BagHandler BagHandler => _bagHandler;
 
     [Header("Health")]
+    [SerializeField] private HealthConfig _healthConfig;
     private Health _health;
     public Health Health => _health;
 
@@ -48,15 +51,16 @@ public class Player : MonoBehaviour, IDamagable
             _animator = GetComponentInChildren<Animator>();
     }
 
-    public void Initialize(MovementConfig movementConfig, HealthConfig healthConfig,
-                           HealthView healthView, BagConfig bagConfig, GameObject spikesTilemap,
+    public void Initialize(HealthView healthView, GameObject spikesTilemap,
                            SceneLoader sceneLoader, CameraHandler cameraHandler, IInput input)
     {
+        InitializeMovement(_movementConfig, input);
+        InitializeHealth(_healthConfig, healthView, sceneLoader, cameraHandler);
+        
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
-        InitializeMovement(movementConfig, input);
-        _bagHandler = new BagHandler(bagConfig, spikesTilemap);
+        _bagHandler = new BagHandler(_bagConfig, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
-        InitializeHealth(healthConfig, healthView, sceneLoader, cameraHandler);
+        
         
         _isInitialized = true;
         OnEnable();

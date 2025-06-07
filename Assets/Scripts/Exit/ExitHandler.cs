@@ -1,14 +1,13 @@
 using UnityEngine;
 
 public class ExitHandler : MonoBehaviour
-{    
-    private ExitHandlerConfig _exitHandlerConfig;
+{
+    [SerializeField] private int _currentGameplaySceneNumber;
     private SceneLoader _sceneLoader;
     private QuestHandler _questHandler;
 
-    public void Initialize(ExitHandlerConfig exitHandlerConfig, SceneLoader sceneLoader, QuestHandler questHandler)
+    public void Initialize(SceneLoader sceneLoader, QuestHandler questHandler)
     {
-        _exitHandlerConfig = exitHandlerConfig;
         _sceneLoader = sceneLoader;
         _questHandler = questHandler;
     }
@@ -33,6 +32,7 @@ public class ExitHandler : MonoBehaviour
 
     private void FinishLevel()
     {
-        Coroutines.StartRoutine(_sceneLoader.LoadScene(_exitHandlerConfig.NextSceneName, _exitHandlerConfig.LoadingTime));
+        _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.GameplayScenesNames[_currentGameplaySceneNumber],
+                                                _sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime);
     }
 }

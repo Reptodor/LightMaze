@@ -80,7 +80,7 @@ public class Health
 
         yield return new WaitForSeconds(_healthConfig.DeathTime);
 
-        _sceneLoader.RestartScene();
+        _sceneLoader.RestartSceneWithLoadingScreen(_sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime);
         Coroutines.StopRoutine(_coroutine);
     }
 }

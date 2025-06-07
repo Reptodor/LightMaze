@@ -1,32 +1,63 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button[] _buttons;
-    private MainMenuConfig _mainMenuConfig;
+    [SerializeField] private MainMenuConfig _mainMenuConfig;
+
     private SceneLoader _sceneLoader;
-    private bool _isActive;
+    private bool _hasLoadingStarted;
+    private bool _isInitialized;
 
-    private void OnValidate()
-    {
-        if(_buttons == null)
-            throw new ArgumentNullException(nameof(_buttons), "Buttons cannot be null");
-    }
-
-    public void Initialize(MainMenuConfig mainMenuConfig)
+    private void Start()
     {
         _sceneLoader = FindAnyObjectByType<SceneLoader>();
-        _mainMenuConfig = mainMenuConfig;
+        _isInitialized = true;
+
+        OnEnable();
     }
 
     private void OnEnable()
     {
-        _isActive = true;
+        if (!_isInitialized)
+            return;
+
+        _sceneLoader.LoadSceneWithOutLoadingScreen(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
+
+        _hasLoadingStarted = false;
         Show();
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.UnloadSceneAsync(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
+    }
+
+    public void Play()
+    {
+        if (_hasLoadingStarted)
+            return;
+
+        _hasLoadingStarted = true;
+        StartCoroutine(Hide());
+    }
+
+    public void OpenSettings()
+    {
+        if(_hasLoadingStarted)
+            return;
+
+        _hasLoadingStarted = true;
+        StartCoroutine(Hide());
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     private void Show()
@@ -42,7 +73,7 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    private IEnumerator Hide(string openingSceneName)
+    private IEnumerator Hide()
     {
         Sequence animation = DOTween.Sequence();
 
@@ -51,33 +82,7 @@ public class MainMenu : MonoBehaviour
                 Append(_buttons[1].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
                 AppendInterval(_mainMenuConfig.Interval).
                 Append(_buttons[2].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
-                AppendCallback(() => Coroutines.StartRoutine(_sceneLoader.LoadScene(openingSceneName, _mainMenuConfig.LoadingTime)));
-    }
-
-    public void Play()
-    {
-        if(!_isActive)
-            return;
-
-        _isActive = false;
-        StartCoroutine(Hide(_mainMenuConfig.GameplaySceneName));
-    }
-
-    public void OpenSettings()
-    {
-        if(!_isActive)
-            return;
-
-        _isActive = false;
-        StartCoroutine(Hide(_mainMenuConfig.SettingsSceneName));
-    }
-
-    public void Quit()
-    {
-        if(!_isActive)
-            return;
-
-        _isActive = false;
-        Application.Quit();
+                AppendCallback(() => _sceneLoader.LoadSceneWithLoadingScreen(
+                    _sceneLoader.SceneNamesConfig.GameplayScenesNames[0], _sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime));
     }
 }

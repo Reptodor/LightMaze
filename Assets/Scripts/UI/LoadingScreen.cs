@@ -3,14 +3,15 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Image))]
-public class LoadingMenu : MonoBehaviour
+public class LoadingScreen : MonoBehaviour
 {
     [SerializeField] private Image _background;
     [SerializeField] private TextMeshProUGUI _loadingText;
+    [SerializeField] private TextBlinkingConfig _textBlinkingConfig;
+
+    private TextBlinking _textBlinking;
     private Sequence _appearAnimation;
     private Sequence _disapperAnimation;
-    private Tween _textAnimation;
     private bool _isAppearing;
 
     public bool IsAppearing => _isAppearing;
@@ -18,20 +19,25 @@ public class LoadingMenu : MonoBehaviour
     private void OnValidate()
     {
         if(_background == null)
-            _background = GetComponent<Image>();
+            _background = GetComponentInChildren<Image>();
 
         if(_loadingText == null)
             _loadingText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
+    private void Awake()
+    {
+        _textBlinking = new TextBlinking(_loadingText, _textBlinkingConfig);
+    }
+
     private void OnEnable()
     {
-        SetTextAnimation();
+        _textBlinking.OnEnable();
     }
 
     private void OnDisable()
     {
-        _textAnimation.Kill();
+        _textBlinking.OnDisable();
         _disapperAnimation.Kill();
     }
 
@@ -52,10 +58,5 @@ public class LoadingMenu : MonoBehaviour
         _disapperAnimation.Append(_background.DOFade(0, 1).From(1).SetEase(Ease.Linear))
                           .Join(_loadingText.DOFade(0, 1)).SetEase(Ease.Linear)
                           .AppendCallback(() => gameObject.SetActive(false));
-    }
-
-    private void SetTextAnimation()
-    {
-        _textAnimation = _loadingText.DOFade(0.08f, 1).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
     }
 }
