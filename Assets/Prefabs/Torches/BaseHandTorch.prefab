@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25f42e6b3d924787b9494fdc6930fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _handTorchConfig: {fileID: 11400000, guid: 0018644a0e932403e878007d604856d8, type: 2}
+  _flame: {fileID: 7748956698512437597}
 --- !u!1 &5324056090021828814
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,12 +1,10 @@
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour, IDamagable
 {
-    private bool _isInitialized;
-
     [Header("Audio")]
-    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioSource _runAudioSource;
     [SerializeField] private AudioSource _hitAudioSource;
 
     [Header("Animation")]
@@ -23,45 +21,53 @@ public class Player : MonoBehaviour, IDamagable
     private OrientationHandler _orientationHandler;
     private RotationHandler _rotationHandler;
 
-    public MovementHandler MovementHandler => _movementHandler;
-
     [Header("Bag")]
-    [SerializeField] private BagConfig _bagConfig;
     private BagHandler _bagHandler;
-
-    public BagHandler BagHandler => _bagHandler;
 
     [Header("Health")]
     [SerializeField] private HealthConfig _healthConfig;
     private Health _health;
+
+    private bool _isInitialized;
+
+    public MovementHandler MovementHandler => _movementHandler;
+    public BagHandler BagHandler => _bagHandler;
     public Health Health => _health;
 
     private void OnValidate()
     {
-        if(_audioSource == null)
-            _audioSource = GetComponent<AudioSource>();
+        if (_runAudioSource == null)
+            throw new ArgumentNullException(nameof(_runAudioSource), "Run audio source cannot be null");
 
-        if(_spriteRenderer == null)
-            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (_hitAudioSource == null)
+            throw new ArgumentNullException(nameof(_hitAudioSource), "Hit audio source cannot be null");
 
-        if(_rigidbody2D == null)
-            _rigidbody2D = GetComponent<Rigidbody2D>();
+        if (_animator == null)
+            throw new ArgumentNullException(nameof(_animator), "Animator cannot be null");
 
-        if(_animator == null)
-            _animator = GetComponentInChildren<Animator>();
+        if (_spriteRenderer == null)
+            throw new ArgumentNullException(nameof(_spriteRenderer), "SpriteRenderer cannot be null");
+
+        if (_rigidbody2D == null)
+            throw new ArgumentNullException(nameof(_rigidbody2D), "Rigidbody2D cannot be null");
+
+        if (_movementConfig == null)
+            throw new ArgumentNullException(nameof(_movementConfig), "MovementConfig cannot be null");
+
+        if (_healthConfig == null)
+            throw new ArgumentNullException(nameof(_healthConfig), "HealthConfig cannot be null");
     }
 
     public void Initialize(HealthView healthView, GameObject spikesTilemap,
-                           SceneLoader sceneLoader, CameraHandler cameraHandler, IInput input)
+                           SceneLoader sceneLoader, CameraHandler cameraHandler, IInput input, int keysCount)
     {
         InitializeMovement(_movementConfig, input);
-        InitializeHealth(_healthConfig, healthView, sceneLoader, cameraHandler);
-        
+
+        _health = new Health(_healthConfig, healthView, _spriteRenderer, sceneLoader, cameraHandler, _hitAudioSource);
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
-        _bagHandler = new BagHandler(_bagConfig, spikesTilemap);
+        _bagHandler = new BagHandler(keysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
-        
-        
+
         _isInitialized = true;
         OnEnable();
     }
@@ -69,14 +75,9 @@ public class Player : MonoBehaviour, IDamagable
     private void InitializeMovement(MovementConfig movementConfig, IInput input)
     {
         _input = input;
-        _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _audioSource);
+        _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _runAudioSource);
         _orientationHandler = new OrientationHandler();
         _rotationHandler = new RotationHandler(transform);
-    }
-
-    private void InitializeHealth(HealthConfig healthConfig, HealthView healthView, SceneLoader sceneLoader, CameraHandler cameraHandler)
-    {
-        _health = new Health(healthConfig, healthView, _spriteRenderer, sceneLoader, cameraHandler, _hitAudioSource);
     }
 
     private void OnEnable()
@@ -101,16 +102,12 @@ public class Player : MonoBehaviour, IDamagable
 
         if(!_health.IsAlive)
         {
-            _audioSource.enabled = false;
+            _runAudioSource.enabled = false;
             return;
         }
 
-        _animationHandler.HandleAnimations(_input.GetInputDirection());
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            Health.RecieveDamage(1);
-        }
+        _input.Update();
+        _animationHandler.HandleAnimations(_input.GetMoveDirection());
     }
 
     private void FixedUpdate()
@@ -120,12 +117,12 @@ public class Player : MonoBehaviour, IDamagable
 
         if(!_health.IsAlive)
         {
-            _movementHandler.HandleMovement(Vector2.zero);
+            _movementHandler.HandleMovementWithSound(Vector2.zero);
             return;
         }
         
-        _movementHandler.HandleMovement(_input.GetInputDirection().normalized);
-        _rotationHandler.HandleRotation(_input.GetInputDirection());
+        _movementHandler.HandleMovementWithSound(_input.GetMoveDirection().normalized);
+        _rotationHandler.HandleRotation(_input.GetMoveDirection());
     }
 
     private void OnDied()

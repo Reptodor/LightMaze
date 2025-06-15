@@ -6,12 +6,14 @@ using UnityEngine;
 
 public class FirtsLevelBootstrap : MonoBehaviour
 {
+    [Header("Level")]
+    [SerializeField] private LevelConfig _levelConfig;
+
     [Header("Tutorial")]
     [SerializeField] private Tutorial _tutorial;
 
     [Header("Camera")]
     [SerializeField] private CameraHandler _cameraHandler;
-    [SerializeField] private CameraHandlerConfig _cameraHandlerConfig;
 
     [Header("Player components")]
     [SerializeField] private Player _player;
@@ -50,9 +52,18 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _speedBoostKey;
     [SerializeField] private TextMeshProUGUI _flameBoostKey;
 
+    [Header("Input")]
+    [SerializeField] private DesktopInputConfig _desktopInputConfig;
+    private DesktopInput _desktopInput;
+
     private void Awake()
     {
         StartCoroutine(nameof(Initialize));
+    }
+
+    private void OnDisable()
+    {
+        Unsubscribe();
     }
 
     public virtual IEnumerator Initialize()
@@ -61,15 +72,15 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _cameraHandler.Initialize(_cameraHandlerConfig, _player);
+        _cameraHandler.Initialize(_player, _levelConfig.CameraFreePosition, _levelConfig.CameraUnfollowingOrthoSize);
 
         yield return null;
 
-        _player.Initialize(_healthView, _spikesTilemap, _sceneLoader, _cameraHandler, ChooseAndGetInputSystem());
+        _player.Initialize(_healthView, _spikesTilemap, _sceneLoader, _cameraHandler, ChooseAndGetInputSystem(), _levelConfig.KeysCount);
 
         yield return null;
 
-        _baseTorch.Initialize(_handTorchConfig, _player, _flameAnimationsConfig);
+        _baseTorch.Initialize(_player, _flameAnimationsConfig);
 
         yield return null;
 
@@ -107,6 +118,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
+            Subscribe();
             _tutorial?.transform.DOScale(7, 1).From(0).SetEase(Ease.OutBounce);
             _flameBoostKey.gameObject.SetActive(true);
             _speedBoostKey.gameObject.SetActive(true);
@@ -121,15 +133,28 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     private IInput ChooseAndGetInputSystem()
     {
-        IInput input = new DesktopInputHandler();
+        _desktopInput = new DesktopInput(_desktopInputConfig);
+        IInput input = _desktopInput;
         _mobileCanvas.gameObject.SetActive(false);
 
         if (SystemInfo.deviceType == DeviceType.Handheld)
         {
             _mobileCanvas.gameObject.SetActive(true);
-            input = new MobileInputHandler(_joystick);
+            input = new MobileInput(_joystick);
         }
 
         return input;
+    }
+
+    private void Subscribe()
+    {
+        _desktopInput.SpeedBoostKeyPressed += _speedBoost.Use;
+        _desktopInput.FlameBoostKeyPressed += _flameBoost.Use;
+    }
+
+    private void Unsubscribe()
+    {
+        _desktopInput.SpeedBoostKeyPressed -= _speedBoost.Use;
+        _desktopInput.FlameBoostKeyPressed -= _flameBoost.Use;
     }
 }

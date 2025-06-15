@@ -1,10 +1,15 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 public class CameraHandler : MonoBehaviour
 {
+    private const float _punchForce = 0.4f;
+    private const float _punchAnimationDuration = 0.05f;
+
+    [SerializeField] private CameraHandlerConfig _cameraHandlerConfig;
     [SerializeField] private Camera _camera;
-    private CameraHandlerConfig _cameraHandlerConfig;
+
     private CameraMovementHandler _cameraMovementHandler;
     private CameraFollowingHandler _cameraFollowingHandler;
     private Sequence _animation;
@@ -13,15 +18,17 @@ public class CameraHandler : MonoBehaviour
 
     private void OnValidate()
     {
-        if(_camera == null)
+        if (_camera == null)
             _camera = GetComponent<Camera>();
+
+        if (_cameraHandlerConfig == null)
+            throw new ArgumentNullException(nameof(_cameraHandlerConfig), "Camera handler config cannot be null");
     }
 
-    public void Initialize(CameraHandlerConfig cameraHandlerConfig, Player player)
+    public void Initialize(Player player, Vector3 cameraFreePosition, float cameraUnfollowingOrthoSize)
     {
-        _cameraHandlerConfig = cameraHandlerConfig;
         _cameraMovementHandler = new CameraMovementHandler(this, player, _cameraHandlerConfig.CameraMovementConfig);
-        _cameraFollowingHandler = new CameraFollowingHandler(_camera, player, _cameraHandlerConfig.CameraFollowingConfig, _cameraMovementHandler);
+        _cameraFollowingHandler = new CameraFollowingHandler(_camera, player, _cameraHandlerConfig.CameraFollowingConfig, _cameraMovementHandler, cameraFreePosition, cameraUnfollowingOrthoSize);
         _cameraFollowingHandler.Switch();
 
         _isInitialized = true;
@@ -45,15 +52,10 @@ public class CameraHandler : MonoBehaviour
         }
     }
 
-    public void Switch()
-    {
-        _cameraFollowingHandler.Switch();
-    }
-
     public void Shake()
     {
         _animation = DOTween.Sequence();
 
-        _animation.Append(transform.DOPunchPosition(Vector2.right * 0.4f, 0.05f));
+        _animation.Append(transform.DOPunchPosition(Vector2.right * _punchForce, _punchAnimationDuration));
     }
 }

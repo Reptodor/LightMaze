@@ -39,7 +39,7 @@ public class Slime : MonoBehaviour
         if(!_isInitialized)
             return;
 
-        _movementHandler.HandleMovement(_slimeVelocityDirectionHandler.GetVelocityDirection());
+        _movementHandler.HandleMovementWithSound(_slimeVelocityDirectionHandler.GetVelocityDirection());
         _rotationHandler.HandleRotation(_slimeVelocityDirectionHandler.GetVelocityDirection());
     }
 

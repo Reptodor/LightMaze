@@ -34,12 +34,6 @@ public class FlameBoostHandler : MonoBehaviour
         if(!_isInitialized)
             return;
 
-        if(Input.GetKeyDown(_boostConfig.Key) && _canUse)
-        {
-            Use();
-            _cooldownAnimation.Kill();
-        }
-
         if(_cooldownImage.fillAmount <= 0.15f)
         {
             _canUse = true;
@@ -50,6 +44,8 @@ public class FlameBoostHandler : MonoBehaviour
     {
         if(!_canUse)
             return;
+
+        _cooldownAnimation.Kill();
 
         _animation = DOTween.Sequence();
 

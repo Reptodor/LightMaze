@@ -1,6 +1,5 @@
 using UnityEngine;
 using DG.Tweening;
-using System;
 
 public class CameraFollowingHandler
 {
@@ -8,16 +7,22 @@ public class CameraFollowingHandler
     private Player _player;
     private CameraFollowingConfig _config;
     private CameraMovementHandler _cameraMovementHandler;
+
+    private Vector3 _cameraFreePosition;
+    private float _cameraUnfollowingOrthoSize;
     private bool _isFollowing = false;
 
     public bool IsFollowing => _isFollowing;
 
-    public CameraFollowingHandler(Camera camera, Player player, CameraFollowingConfig cameraFollowingConfig, CameraMovementHandler cameraMovementHandler)
+    public CameraFollowingHandler(Camera camera, Player player, CameraFollowingConfig cameraFollowingConfig, CameraMovementHandler cameraMovementHandler,
+                                  Vector3 cameraFreePosition, float cameraUnfollowingOrthoSize)
     {
         _camera = camera;
         _player = player;
         _config = cameraFollowingConfig;
         _cameraMovementHandler = cameraMovementHandler;
+        _cameraFreePosition = cameraFreePosition;
+        _cameraUnfollowingOrthoSize = cameraUnfollowingOrthoSize;
     }
 
     public void Switch()
@@ -45,7 +50,7 @@ public class CameraFollowingHandler
 
     private Vector3 GetEndPosition()
     {
-        Vector3 endPosition = new Vector3(_player.transform.position.x, _player.transform.position.y, _config.FreePosition.z);
+        Vector3 endPosition = new Vector3(_player.transform.position.x, _player.transform.position.y, _cameraFreePosition.z);
 
         return endPosition;
     }
@@ -54,8 +59,8 @@ public class CameraFollowingHandler
     {
         Sequence animation = DOTween.Sequence();
 
-        animation.Append(_camera.transform.DOMove(_config.FreePosition, _config.AnimationDuration))
-                  .Join(_camera.DOOrthoSize(_config.UnfollowingOrthoSize, _config.AnimationDuration))
+        animation.Append(_camera.transform.DOMove(_cameraFreePosition, _config.AnimationDuration))
+                  .Join(_camera.DOOrthoSize(_cameraUnfollowingOrthoSize, _config.AnimationDuration))
                   .AppendCallback(() => _isFollowing = false)
                   .AppendCallback(() => _cameraMovementHandler.SetFollowing(_isFollowing));
     }

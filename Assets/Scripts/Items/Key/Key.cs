@@ -4,6 +4,10 @@ using UnityEngine.Rendering.Universal;
 
 public class Key : MonoBehaviour
 {
+    private const float _enableAnimationStartValue = 0f;
+    private const float _enableAnimationEndValue = 1f;
+    private const float _enableAnimationDuration = 1f;
+
     [SerializeField] private Light2D _light2D;
     private ShakeAnimationHandler _shakeAnimationHandler;
     private Tween _enableLightTween;
@@ -38,7 +42,7 @@ public class Key : MonoBehaviour
     public void EnableLight()
     {
         _light2D.enabled = true;
-        _enableLightTween = DOTween.To(SetLightIntesity, 0, 1f, 1f);
+        _enableLightTween = DOTween.To(SetLightIntesity, _enableAnimationStartValue, _enableAnimationEndValue, _enableAnimationDuration);
     }
 
     private void SetLightIntesity(float intensity)

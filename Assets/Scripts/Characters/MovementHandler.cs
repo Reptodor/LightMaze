@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MovementHandler
@@ -14,26 +15,30 @@ public class MovementHandler
         _movementConfig = movementConfig;
         _rigidbody2D = rigidbody2D;
         _audioSource = audioSource;
+        _audioSource.clip = _movementConfig.AudioClip;
         SetSpeed(_movementConfig.Speed);
     }
 
     public void SetSpeed(float value)
     {
+        if (value < 0)
+            throw new ArgumentOutOfRangeException(nameof(value), "Value cannot be below zero");
+
         _speed = value;
     }
 
     public bool IsMoving()
     {
-        if(_rigidbody2D.velocity != Vector2.zero)
-            return true;
-
-        _audioSource.clip = _movementConfig.AudioClip;
-        _audioSource.Play();
-        return false;
+        return _rigidbody2D.velocity != Vector2.zero;
     }
 
-    public void HandleMovement(Vector2 moveDirection)
+    public void HandleMovementWithSound(Vector2 moveDirection)
     {
+        if (IsMoving() && !_audioSource.isPlaying)
+            _audioSource.Play();
+        else if(!IsMoving())
+            _audioSource.Stop();
+
         _rigidbody2D.velocity = moveDirection * _speed;
     }
 }
