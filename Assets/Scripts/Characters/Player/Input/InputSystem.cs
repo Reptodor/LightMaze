@@ -1,25 +1,27 @@
 using System;
 using UnityEngine;
 
-public class DesktopInput : IInput
+public class InputSystem
 {
-    private readonly DesktopInputConfig _desktopInputConfig;
+    private readonly InputConfig _inputConfig;
     private Vector2 _moveDirection;
 
     public event Action SpeedBoostKeyPressed;
     public event Action FlameBoostKeyPressed;
 
-    public DesktopInput(DesktopInputConfig desktopInputConfig)
+    public InputConfig InputConfig => _inputConfig;
+
+    public InputSystem(InputConfig inputConfig)
     {
-        _desktopInputConfig = desktopInputConfig;
+        _inputConfig = inputConfig;
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(_desktopInputConfig.SpeedBoostKey))
+        if (Input.GetKeyDown(_inputConfig.SpeedBoostKey))
             SpeedBoostKeyPressed?.Invoke();
 
-        if (Input.GetKeyDown(_desktopInputConfig.FlameBoostKey))
+        if (Input.GetKeyDown(_inputConfig.FlameBoostKey))
             FlameBoostKeyPressed?.Invoke();
     }
 

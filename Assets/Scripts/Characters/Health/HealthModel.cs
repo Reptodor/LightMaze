@@ -1,35 +1,38 @@
 using System;
-using UnityEngine;
 
 public class HealthModel
 {
-    private HealthConfig _healthConfig;
-    private int _maxValue;
-    private int _currentValue;
+    private int _maxHealth;
+    private int _currentHealth;
 
-    public int CurrentValue => _currentValue;
+    public int CurrentHealth => _currentHealth;
 
-    public event Action<float> ValueChanged;
+    public event Action<float> HealthChanged;
+    public event Action Died;
 
-    public HealthModel(HealthConfig healthConfig)
+    public HealthModel(int maxValue)
     {
-        if (healthConfig == null)
-            throw new ArgumentNullException(nameof(healthConfig), "Health config cannot be null");
-
-        _healthConfig = healthConfig;
-        _maxValue = _healthConfig.MaxValue;
-        _currentValue = _maxValue;
+        _maxHealth = maxValue;
+        _currentHealth = _maxHealth;
     }
 
-    public void ReduceValue(int damage)
+    public void TakeDamage(int damage)
     {
-        _currentValue -= damage;
-        Debug.Log($"{_currentValue},{_maxValue},{GetCurrentValuePercentage()}");
-        ValueChanged?.Invoke(GetCurrentValuePercentage());
+        if (_currentHealth <= 0 || damage == 0)
+            return;
+
+        if (damage < 0)
+            throw new ArgumentOutOfRangeException(nameof(damage), "Damage cannot be below zero");
+
+        _currentHealth -= damage;
+        HealthChanged?.Invoke(GetCurrentHealthPercentage());
+
+        if (_currentHealth <= 0)
+            Died?.Invoke();
     }
 
-    private float GetCurrentValuePercentage()
+    private float GetCurrentHealthPercentage()
     {
-        return (float)_currentValue / _maxValue;
+        return (float)_currentHealth / _maxHealth;
     }
 }

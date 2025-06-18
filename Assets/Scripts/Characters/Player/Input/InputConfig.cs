@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewDesktopInputConfig", menuName = "Configs/Input/Desktop")]
-public class DesktopInputConfig : ScriptableObject
+[CreateAssetMenu(fileName = "NewInputConfig", menuName = "Configs/Input")]
+public class InputConfig : ScriptableObject
 {
     [SerializeField] private KeyCode _speedBoostKey;
     [SerializeField] private KeyCode _flameBoostKey;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ExitHandler : MonoBehaviour
 {
-    [SerializeField] private int _currentGameplaySceneNumber;
+    [SerializeField] private int _nextGameplaySceneNumber;
     private SceneLoader _sceneLoader;
     private QuestHandler _questHandler;
 
@@ -32,7 +32,7 @@ public class ExitHandler : MonoBehaviour
 
     private void FinishLevel()
     {
-        _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.GameplayScenesNames[_currentGameplaySceneNumber],
+        _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.GameplayScenesNames[_nextGameplaySceneNumber],
                                                 _sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime);
     }
 }

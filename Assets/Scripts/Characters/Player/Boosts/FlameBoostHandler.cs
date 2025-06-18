@@ -2,22 +2,32 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 
 public class FlameBoostHandler : MonoBehaviour
 {
+    [SerializeField] private BoostConfig _boostConfig;
     [SerializeField] private Image _cooldownImage;
+
     private Light2D _flame;
     private Sequence _animation;
     private Sequence _cooldownAnimation;
-    private BoostConfig _boostConfig;
     private float _defaultOuter;
     private bool _canUse = true;
     private bool _isInitialized;
+    
+    private void OnValidate()
+    {
+        if (_boostConfig == null)
+            throw new ArgumentNullException(nameof(_boostConfig), "Boost config cannot be null");
 
-    public void Initialize(BoostConfig boostConfig, HandTorch handTorch)
+        if (_cooldownImage == null)
+            throw new ArgumentNullException(nameof(_cooldownImage), "Cooldown image cannot be null");
+    }
+
+    public void Initialize(HandTorch handTorch)
     {
         _flame = handTorch.Flame;
-        _boostConfig = boostConfig;
         _defaultOuter = _flame.pointLightOuterRadius;
 
         _isInitialized = true;

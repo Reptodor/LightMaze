@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Player components")]
     [SerializeField] private Player _player;
-    [SerializeField] private HealthView _healthView;
     [SerializeField] private GameObject _spikesTilemap;
 
     [Header("MobileComponents")]
@@ -44,27 +42,21 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [Header("ShakeAnimation")]
     [SerializeField] protected ShakeAnimationConfig ShakeAnimationConfig;
 
-    [Header("Boosts")]
-    [SerializeField] private SpeedBoostHandler _speedBoost;
-    [SerializeField] private FlameBoostHandler _flameBoost;
-    [SerializeField] private BoostConfig _speedBoostConfig;
-    [SerializeField] private BoostConfig _flameBoostConfig;
-    [SerializeField] private TextMeshProUGUI _speedBoostKey;
-    [SerializeField] private TextMeshProUGUI _flameBoostKey;
-
-    [Header("Input")]
-    [SerializeField] private DesktopInputConfig _desktopInputConfig;
-    private DesktopInput _desktopInput;
+    // [Header("Boosts")]
+    // [SerializeField] private SpeedBoost _speedBoost;
+    // [SerializeField] private FlameBoostHandler _flameBoost;
+    // [SerializeField] private TextMeshProUGUI _speedBoostKey;
+    // [SerializeField] private TextMeshProUGUI _flameBoostKey;
 
     private void Awake()
     {
         StartCoroutine(nameof(Initialize));
     }
 
-    private void OnDisable()
-    {
-        Unsubscribe();
-    }
+    // private void OnDisable()
+    // {
+    //     Unsubscribe();
+    // }
 
     public virtual IEnumerator Initialize()
     {
@@ -76,7 +68,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _player.Initialize(_healthView, _spikesTilemap, _sceneLoader, _cameraHandler, ChooseAndGetInputSystem(), _levelConfig.KeysCount);
+        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig.KeysCount);
 
         yield return null;
 
@@ -108,53 +100,38 @@ public class FirtsLevelBootstrap : MonoBehaviour
             yield return null;
         }
 
-        _speedBoost.Initialize(_speedBoostConfig, _player.MovementHandler);
+        // _speedBoost.Initialize(_player.MovementHandler);
 
         yield return null;
 
-        _flameBoost.Initialize(_flameBoostConfig, _baseTorch);
+        // _flameBoost.Initialize(_baseTorch);
 
         yield return null;
 
-        if (SystemInfo.deviceType == DeviceType.Desktop)
-        {
-            Subscribe();
-            _tutorial?.transform.DOScale(7, 1).From(0).SetEase(Ease.OutBounce);
-            _flameBoostKey.gameObject.SetActive(true);
-            _speedBoostKey.gameObject.SetActive(true);
-            _flameBoostKey.text = _flameBoostConfig.Key.ToString();
-            _speedBoostKey.text = _speedBoostConfig.Key.ToString();
-        }
-        else
-        {
-            _tutorial.gameObject.SetActive(false);
-        }
+        _tutorial.Open();
+
+        yield return null;
+
+        // InitializeBoosts();
     }
 
-    private IInput ChooseAndGetInputSystem()
-    {
-        _desktopInput = new DesktopInput(_desktopInputConfig);
-        IInput input = _desktopInput;
-        _mobileCanvas.gameObject.SetActive(false);
+    // private void InitializeBoosts()
+    // {
+    //     Subscribe();
+        
+    //     _speedBoostKey.text = _player.InputSystem.InputConfig.SpeedBoostKey.ToString();
+    //     _flameBoostKey.text = _player.InputSystem.InputConfig.FlameBoostKey.ToString();
+    // }
 
-        if (SystemInfo.deviceType == DeviceType.Handheld)
-        {
-            _mobileCanvas.gameObject.SetActive(true);
-            input = new MobileInput(_joystick);
-        }
+    // private void Subscribe()
+    // {
+    //     _player.InputSystem.SpeedBoostKeyPressed += _speedBoost.Use;
+    //     _player.InputSystem.FlameBoostKeyPressed += _flameBoost.Use;
+    // }
 
-        return input;
-    }
-
-    private void Subscribe()
-    {
-        _desktopInput.SpeedBoostKeyPressed += _speedBoost.Use;
-        _desktopInput.FlameBoostKeyPressed += _flameBoost.Use;
-    }
-
-    private void Unsubscribe()
-    {
-        _desktopInput.SpeedBoostKeyPressed -= _speedBoost.Use;
-        _desktopInput.FlameBoostKeyPressed -= _flameBoost.Use;
-    }
+    // private void Unsubscribe()
+    // {
+    //     _player.InputSystem.SpeedBoostKeyPressed -= _speedBoost.Use;
+    //     _player.InputSystem.FlameBoostKeyPressed -= _flameBoost.Use;
+    // }
 }

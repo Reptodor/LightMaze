@@ -1,4 +1,8 @@
+using System;
+
 public interface IDamagable
 {
-    Health Health { get; }
+    public event Action<int> Damaged;
+
+    void TakeDamage(int damage);
 }

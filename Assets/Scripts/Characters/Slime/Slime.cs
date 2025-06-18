@@ -4,6 +4,7 @@ public class Slime : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private int _damage;
     [SerializeField] private float _movementDistance;
     private MovementHandler _movementHandler;
     private RotationHandler _rotationHandler;
@@ -52,10 +53,10 @@ public class Slime : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Player player = other.GetComponent<Player>();
-        
-        if(player != null)
+
+        if (player != null)
         {
-            player.Health.RecieveDamage(1);
+            player.TakeDamage(_damage);
         }
     }
 }

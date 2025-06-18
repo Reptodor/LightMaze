@@ -1,6 +1,6 @@
 public interface IQuest
 {
-    public bool IsCompleted();
+    bool IsCompleted();
     void ChangeText();
     void Complete();
 }
