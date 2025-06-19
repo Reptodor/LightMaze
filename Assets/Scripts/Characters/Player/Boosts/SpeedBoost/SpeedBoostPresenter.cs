@@ -8,6 +8,7 @@ public class SpeedBoostPresenter
 
     private float _boostPercent;
     private float _defaultSpeed;
+    private float _currentBoostPercent;
 
     private const float _baseBoostPercent = 1f;
 
@@ -25,11 +26,13 @@ public class SpeedBoostPresenter
     public void Subscribe()
     {
         _view.BoostRequested += OnBoostRequested;
+        _model.BoostIsOver += OnBoostIsOver;
     }
 
     public void Unsubscribe()
     {
         _view.BoostRequested -= OnBoostRequested;
+        _model.BoostIsOver -= OnBoostIsOver;
     }
 
     public void Update()
@@ -48,20 +51,26 @@ public class SpeedBoostPresenter
         _model.ActivateBoost();
         _view.ShowCooldownVisual();
 
-        float currentBoostPercent;
-
         if (_model.IsBoostActive)
         {
-            currentBoostPercent = _boostPercent;
-        }
-        else
-        {
-            currentBoostPercent = _baseBoostPercent;
+            _currentBoostPercent = _boostPercent;
         }
 
-        _view.PlayRunSoundWithBoostPercent(currentBoostPercent);
-        _view.PlayRunAnimationWithBoostPercent(currentBoostPercent);
-        SetRunSpeedWithBoostPercent(currentBoostPercent);
+        ApplyBoostPercent();
+    }
+
+    private void OnBoostIsOver()
+    {
+        _currentBoostPercent = _baseBoostPercent;
+
+        ApplyBoostPercent();
+    }
+
+    private void ApplyBoostPercent()
+    {
+        _view.PlayRunSoundWithBoostPercent(_currentBoostPercent);
+        _view.PlayRunAnimationWithBoostPercent(_currentBoostPercent);
+        SetRunSpeedWithBoostPercent(_currentBoostPercent);
     }
 
     private void SetRunSpeedWithBoostPercent(float boostPercent)

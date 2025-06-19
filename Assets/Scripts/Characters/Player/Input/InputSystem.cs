@@ -9,7 +9,7 @@ public class InputSystem
     public event Action SpeedBoostKeyPressed;
     public event Action FlameBoostKeyPressed;
 
-    public InputConfig InputConfig => _inputConfig;
+    public KeyCode SpeedBoostKey => _inputConfig.SpeedBoostKey;
 
     public InputSystem(InputConfig inputConfig)
     {

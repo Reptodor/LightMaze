@@ -6,7 +6,7 @@ using System;
 
 public class FlameBoostHandler : MonoBehaviour
 {
-    [SerializeField] private BoostConfig _boostConfig;
+    [SerializeField] private SpeedBoostConfig _boostConfig;
     [SerializeField] private Image _cooldownImage;
 
     private Light2D _flame;

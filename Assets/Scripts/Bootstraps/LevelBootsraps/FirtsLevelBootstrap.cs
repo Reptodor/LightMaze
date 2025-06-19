@@ -22,31 +22,25 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private Joystick _joystick;
     [SerializeField] private Canvas _mobileCanvas;
 
+    [Header("Quests")]
+    [SerializeField] private QuestHandler _questHandler;
+    [SerializeField] private QuestAnimationHandlerConfig _questHandlerConfig;
+
+    [Header("Exit")]
+    [SerializeField] private ExitHandler _exitHandler;
+    private SceneLoader _sceneLoader;
+
     [Header("Torches")]
     [SerializeField] private HandTorch _baseTorch;
     [SerializeField] private List<GroundTorch> _baseGroundTorches;
     [SerializeField] private HandTorchConfig _handTorchConfig;
     [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
 
-    [Header("Exit")]
-    [SerializeField] private ExitHandler _exitHandler;
-    private SceneLoader _sceneLoader;
-
-    [Header("Quests")]
-    [SerializeField] private QuestHandler _questHandler;
-    [SerializeField] private QuestAnimationHandlerConfig _questHandlerConfig;
-
     [Header("Keys")]
     [SerializeField] protected Key[] Keys;
 
     [Header("ShakeAnimation")]
     [SerializeField] protected ShakeAnimationConfig ShakeAnimationConfig;
-
-    // [Header("Boosts")]
-    // [SerializeField] private SpeedBoost _speedBoost;
-    // [SerializeField] private FlameBoostHandler _flameBoost;
-    // [SerializeField] private TextMeshProUGUI _speedBoostKey;
-    // [SerializeField] private TextMeshProUGUI _flameBoostKey;
 
     private void Awake()
     {
@@ -76,15 +70,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        foreach (var baseGroundTorch in _baseGroundTorches)
-        {
-            baseGroundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
-
-            yield return null;
-        }
-
-        yield return null;
-
         _questHandler.Initialize(_questHandlerConfig, _player.BagHandler);
 
         yield return null;
@@ -93,45 +78,22 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
+        _tutorial.Open();
+
+        yield return null;
+
+        foreach (var baseGroundTorch in _baseGroundTorches)
+        {
+            baseGroundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
+
+            yield return null;
+        }
+
         foreach (Key key in Keys)
         {
             key.Initialize(ShakeAnimationConfig);
 
             yield return null;
         }
-
-        // _speedBoost.Initialize(_player.MovementHandler);
-
-        yield return null;
-
-        // _flameBoost.Initialize(_baseTorch);
-
-        yield return null;
-
-        _tutorial.Open();
-
-        yield return null;
-
-        // InitializeBoosts();
     }
-
-    // private void InitializeBoosts()
-    // {
-    //     Subscribe();
-        
-    //     _speedBoostKey.text = _player.InputSystem.InputConfig.SpeedBoostKey.ToString();
-    //     _flameBoostKey.text = _player.InputSystem.InputConfig.FlameBoostKey.ToString();
-    // }
-
-    // private void Subscribe()
-    // {
-    //     _player.InputSystem.SpeedBoostKeyPressed += _speedBoost.Use;
-    //     _player.InputSystem.FlameBoostKeyPressed += _flameBoost.Use;
-    // }
-
-    // private void Unsubscribe()
-    // {
-    //     _player.InputSystem.SpeedBoostKeyPressed -= _speedBoost.Use;
-    //     _player.InputSystem.FlameBoostKeyPressed -= _flameBoost.Use;
-    // }
 }

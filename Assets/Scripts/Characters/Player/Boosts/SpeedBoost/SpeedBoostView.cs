@@ -8,7 +8,6 @@ public class SpeedBoostView : MonoBehaviour
     [SerializeField] private Button _boostButton;
     [SerializeField] private Image _cooldownOverlay;
     [SerializeField] private AudioSource _runAudioSource;
-    [SerializeField] private KeyCode _boostKey;
     [SerializeField] private Animator _playerAnimator;
     [SerializeField] private TextMeshProUGUI _keyText;
 
@@ -30,9 +29,6 @@ public class SpeedBoostView : MonoBehaviour
         if (_runAudioSource == null)
             throw new ArgumentNullException(nameof(_runAudioSource), "RunAudioSource cannot be null");
 
-        if (_boostKey == KeyCode.None)
-            throw new ArgumentOutOfRangeException(nameof(_boostKey), "BoostKey cannot be none");
-
         if (_playerAnimator == null)
             throw new ArgumentNullException(nameof(_playerAnimator), "PlayerAnimator cannot be null");
 
@@ -40,19 +36,16 @@ public class SpeedBoostView : MonoBehaviour
             throw new ArgumentNullException(nameof(_keyText), "Key text cannot be null");
     }
 
-    private void Start()
+    public void Initialize(KeyCode speedBoostKey)
     {
-        _keyText.text = _boostKey.ToString();
+        _keyText.text = speedBoostKey.ToString();
         _boostButton.onClick.AddListener(() => BoostRequested?.Invoke());
         _defaultPitch = _runAudioSource.pitch;
     }
 
-    private void Update()
+    public void OnSpeedBoostKeyPressed()
     {
-        if (Input.GetKeyDown(_boostKey))
-        {
-            BoostRequested?.Invoke();
-        }
+        BoostRequested?.Invoke();
     }
 
     public void ShowCooldownVisual()

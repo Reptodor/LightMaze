@@ -33,15 +33,13 @@ public class Player : MonoBehaviour, IDamagable
     private InputSystem _inputSystem;
 
     [Header("SpeedBoost")]
-    [SerializeField] private BoostConfig _speedBoostConfig;
+    [SerializeField] private SpeedBoostConfig _speedBoostConfig;
     [SerializeField] private SpeedBoostView _speedBoostView;
     private SpeedBoostPresenter _speedBoostPresenter;
 
     private bool _isInitialized;
 
-    public MovementHandler MovementHandler => _movementHandler;
     public BagHandler BagHandler => _bagHandler;
-    public InputSystem InputSystem => _inputSystem;
 
     public event Action<int> Damaged;
 
@@ -112,6 +110,7 @@ public class Player : MonoBehaviour, IDamagable
 
     private void InitializeSpeedBoost()
     {
+        _speedBoostView.Initialize(_inputSystem.SpeedBoostKey);
         SpeedBoostModel speedBoostModel = new SpeedBoostModel(_speedBoostConfig.Duration, _speedBoostConfig.Cooldown);
         _speedBoostPresenter = new SpeedBoostPresenter(_speedBoostView, speedBoostModel, _movementHandler, _speedBoostConfig.BoostPercent);
     }
@@ -124,6 +123,7 @@ public class Player : MonoBehaviour, IDamagable
         _healthPresenter.Subscribe();
         _speedBoostPresenter.Subscribe();
         Damaged += _healthPresenter.OnDamaged;
+        _inputSystem.SpeedBoostKeyPressed += _speedBoostView.OnSpeedBoostKeyPressed;
     }
 
     private void OnDisable()
@@ -131,6 +131,7 @@ public class Player : MonoBehaviour, IDamagable
         _healthPresenter.Unsubscribe();
         _speedBoostPresenter.Unsubscribe();
         Damaged -= _healthPresenter.OnDamaged;
+        _inputSystem.SpeedBoostKeyPressed -= _speedBoostView.OnSpeedBoostKeyPressed;
     }
 
     private void Update()
@@ -147,9 +148,6 @@ public class Player : MonoBehaviour, IDamagable
         _inputSystem.Update();
         _speedBoostPresenter.Update();
         _animationHandler.HandleAnimations(_inputSystem.GetMoveDirection());
-
-        if (Input.GetKeyDown(KeyCode.V))
-            TakeDamage(1);
     }
 
     private void FixedUpdate()

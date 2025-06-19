@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewBoostConfig", menuName = "Configs/Boost")]
-public class BoostConfig : ScriptableObject
+public class SpeedBoostConfig : ScriptableObject
 {
     [SerializeField] private float _boostPercent;
     [SerializeField] private float _duration;

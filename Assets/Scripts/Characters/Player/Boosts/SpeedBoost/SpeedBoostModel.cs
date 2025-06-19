@@ -1,10 +1,15 @@
+using System;
+
 public class SpeedBoostModel
 {
-    private float _boostDuration;
+    private readonly float _boostDuration;
+    private float _remainingBoostDuration;
 
     public bool IsBoostActive { get; private set; }
     public float CooldownDuration { get; private set; }
     public float CurrentCooldown { get; private set; }
+
+    public event Action BoostIsOver;
 
     public SpeedBoostModel(float boostDuration, float cooldownDuration)
     {
@@ -17,6 +22,7 @@ public class SpeedBoostModel
         if (CurrentCooldown <= 0)
         {
             IsBoostActive = true;
+            _remainingBoostDuration = _boostDuration;
             CurrentCooldown = CooldownDuration;
         }
     }
@@ -25,11 +31,12 @@ public class SpeedBoostModel
     {
         if (IsBoostActive)
         {
-            _boostDuration -= deltaTime;
-            if (_boostDuration <= 0)
+            _remainingBoostDuration -= deltaTime;
+
+            if (_remainingBoostDuration <= 0)
             {
                 IsBoostActive = false;
-                _boostDuration = 3.0f;
+                BoostIsOver?.Invoke();
             }
         }
         else if (CurrentCooldown > 0)
