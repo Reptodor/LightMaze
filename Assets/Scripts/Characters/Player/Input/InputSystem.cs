@@ -6,10 +6,12 @@ public class InputSystem
     private readonly InputConfig _inputConfig;
     private Vector2 _moveDirection;
 
-    public event Action SpeedBoostKeyPressed;
-    public event Action FlameBoostKeyPressed;
+    public event Action SpeedAbilityKeyPressed;
+    public event Action TeleportAbilityKeyPressed;
+    public event Action CameraStateSwitchKeyPressed;
 
-    public KeyCode SpeedBoostKey => _inputConfig.SpeedBoostKey;
+    public KeyCode SpeedAbilityKey => _inputConfig.SpeedAbilityKey;
+    public KeyCode TeleportAbilityKey => _inputConfig.TeleportAbilityKey;
 
     public InputSystem(InputConfig inputConfig)
     {
@@ -18,11 +20,14 @@ public class InputSystem
 
     public void Update()
     {
-        if (Input.GetKeyDown(_inputConfig.SpeedBoostKey))
-            SpeedBoostKeyPressed?.Invoke();
+        if (Input.GetKeyDown(_inputConfig.SpeedAbilityKey))
+            SpeedAbilityKeyPressed?.Invoke();
 
-        if (Input.GetKeyDown(_inputConfig.FlameBoostKey))
-            FlameBoostKeyPressed?.Invoke();
+        if (Input.GetKeyDown(_inputConfig.TeleportAbilityKey))
+            TeleportAbilityKeyPressed?.Invoke();
+
+        if (Input.GetKeyDown(_inputConfig.CameraStateSwitchKey))
+            CameraStateSwitchKeyPressed?.Invoke();
     }
 
     public Vector2 GetMoveDirection()

@@ -1,22 +1,23 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class Key : MonoBehaviour
 {
-    private const float _enableAnimationStartValue = 0f;
-    private const float _enableAnimationEndValue = 1f;
-    private const float _enableAnimationDuration = 1f;
-
     [SerializeField] private Light2D _light2D;
     private ShakeAnimationHandler _shakeAnimationHandler;
     private Tween _enableLightTween;
     private bool _isInitialized;
 
+    private const float _enableAnimationStartValue = 0f;
+    private const float _enableAnimationEndValue = 1f;
+    private const float _enableAnimationDuration = 1f;
+    
     private void OnValidate()
     {
-        if(_light2D == null)
-            _light2D = GetComponent<Light2D>();
+        if (_light2D == null)
+            throw new ArgumentNullException(nameof(_light2D), "Light2D cannot be null");
     }
 
     public void Initialize(ShakeAnimationConfig shakeAnimationConfig)

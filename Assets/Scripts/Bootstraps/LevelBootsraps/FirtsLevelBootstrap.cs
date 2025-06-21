@@ -47,11 +47,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
         StartCoroutine(nameof(Initialize));
     }
 
-    // private void OnDisable()
-    // {
-    //     Unsubscribe();
-    // }
-
     public virtual IEnumerator Initialize()
     {
         _sceneLoader = FindAnyObjectByType<SceneLoader>();
@@ -62,7 +57,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig.KeysCount);
+        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig.KeysCount);
 
         yield return null;
 

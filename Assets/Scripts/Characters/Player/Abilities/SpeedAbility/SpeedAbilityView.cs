@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpeedBoostView : MonoBehaviour
+public class SpeedAbilityView : MonoBehaviour
 {
-    [SerializeField] private Button _boostButton;
+    [SerializeField] private Button _abilityButton;
     [SerializeField] private Image _cooldownOverlay;
     [SerializeField] private AudioSource _runAudioSource;
     [SerializeField] private Animator _playerAnimator;
@@ -13,15 +13,15 @@ public class SpeedBoostView : MonoBehaviour
 
     private float _defaultPitch;
 
-    private const string _animatorParameterName = "SpeedBoost";
+    private const string _animatorParameterName = "SpeedAbility";
     private const float _fillAmountAtStartOfShowing = 1f;
 
-    public event Action BoostRequested;
+    public event Action AbilityRequested;
 
     private void OnValidate()
     {
-        if (_boostButton == null)
-            throw new ArgumentNullException(nameof(_boostButton), "BoostButton cannot be null");
+        if (_abilityButton == null)
+            throw new ArgumentNullException(nameof(_abilityButton), "AbilityButton cannot be null");
 
         if (_cooldownOverlay == null)
             throw new ArgumentNullException(nameof(_cooldownOverlay), "CooldownOverlay cannot be null");
@@ -36,16 +36,16 @@ public class SpeedBoostView : MonoBehaviour
             throw new ArgumentNullException(nameof(_keyText), "Key text cannot be null");
     }
 
-    public void Initialize(KeyCode speedBoostKey)
+    public void Initialize(KeyCode speedAbilityKey)
     {
-        _keyText.text = speedBoostKey.ToString();
-        _boostButton.onClick.AddListener(() => BoostRequested?.Invoke());
+        _keyText.text = speedAbilityKey.ToString();
+        _abilityButton.onClick.AddListener(() => AbilityRequested?.Invoke());
         _defaultPitch = _runAudioSource.pitch;
     }
 
-    public void OnSpeedBoostKeyPressed()
+    public void OnSpeedAbilityKeyPressed()
     {
-        BoostRequested?.Invoke();
+        AbilityRequested?.Invoke();
     }
 
     public void ShowCooldownVisual()

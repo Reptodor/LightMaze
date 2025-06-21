@@ -11,12 +11,10 @@ public class HandTorch : MonoBehaviour
     private float _angle = 0;
     private bool _isInitialized = false;
 
-    public Light2D Flame => _flame; 
-
     private void OnValidate()
     {
         if (_flame == null)
-            _flame = GetComponentInChildren<Light2D>();
+            throw new ArgumentNullException(nameof(_flame), "Flame cannot be null");
 
         if (_handTorchConfig == null)
             throw new ArgumentNullException(nameof(_handTorchConfig), "Hand torch config cannot be null");

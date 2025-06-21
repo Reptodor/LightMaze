@@ -51,7 +51,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 3d6446211ce8843aeab36f46883075fe, type: 2}
   m_Tag: 
-  m_SpeedParameter: SpeedBoost
+  m_SpeedParameter: SpeedAbility
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -146,7 +146,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 8247ac632c6344fd6bafdd47dc5abca6, type: 2}
   m_Tag: 
-  m_SpeedParameter: SpeedBoost
+  m_SpeedParameter: SpeedAbility
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -172,7 +172,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 18d0876b8fe24485fbe87bb92528c05d, type: 2}
   m_Tag: 
-  m_SpeedParameter: SpeedBoost
+  m_SpeedParameter: SpeedAbility
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -247,7 +247,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 0}
-  - m_Name: SpeedBoost
+  - m_Name: SpeedAbility
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
@@ -314,7 +314,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: a0e8bf221a7094a8a85a5bbe87abe7fe, type: 2}
   m_Tag: 
-  m_SpeedParameter: SpeedBoost
+  m_SpeedParameter: SpeedAbility
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -519,7 +519,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 13145c761ef034600bff54a788a99817, type: 2}
   m_Tag: 
-  m_SpeedParameter: SpeedBoost
+  m_SpeedParameter: SpeedAbility
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

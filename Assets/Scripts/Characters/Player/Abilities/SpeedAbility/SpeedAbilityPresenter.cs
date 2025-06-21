@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class SpeedBoostPresenter
+public class SpeedAbilityPresenter
 {
-    private SpeedBoostView _view;
-    private SpeedBoostModel _model;
+    private SpeedAbilityView _view;
+    private AbilityModel _model;
     private MovementHandler _playerMovementHandler;
 
     private float _boostPercent;
@@ -12,11 +12,11 @@ public class SpeedBoostPresenter
 
     private const float _baseBoostPercent = 1f;
 
-    public SpeedBoostPresenter(SpeedBoostView speedBoostView, SpeedBoostModel speedBoostModel,
-                               MovementHandler playerMovementHandler, float boostPercent)
+    public SpeedAbilityPresenter(SpeedAbilityView speedAbilityView, AbilityModel speedAbilityModel,
+                                 MovementHandler playerMovementHandler, float boostPercent)
     {
-        _view = speedBoostView;
-        _model = speedBoostModel;
+        _view = speedAbilityView;
+        _model = speedAbilityModel;
         _boostPercent = boostPercent;
 
         _playerMovementHandler = playerMovementHandler;
@@ -25,33 +25,33 @@ public class SpeedBoostPresenter
 
     public void Subscribe()
     {
-        _view.BoostRequested += OnBoostRequested;
-        _model.BoostIsOver += OnBoostIsOver;
+        _view.AbilityRequested += OnAbilityRequested;
+        _model.AbilityIsOver += OnAbilityIsOver;
     }
 
     public void Unsubscribe()
     {
-        _view.BoostRequested -= OnBoostRequested;
-        _model.BoostIsOver -= OnBoostIsOver;
+        _view.AbilityRequested -= OnAbilityRequested;
+        _model.AbilityIsOver -= OnAbilityIsOver;
     }
 
     public void Update()
     {
         _model.Update(Time.deltaTime);
 
-        if (!_model.IsBoostActive && _model.CurrentCooldown > 0)
+        if (!_model.IsAbilityActive && _model.CurrentCooldown > 0)
         {
             float cooldownProgress = _model.CurrentCooldown / _model.CooldownDuration;
             _view.UpdateCooldownVisual(cooldownProgress);
         }
     }
 
-    private void OnBoostRequested()
+    private void OnAbilityRequested()
     {
-        _model.ActivateBoost();
+        _model.ActivateAbility();
         _view.ShowCooldownVisual();
 
-        if (_model.IsBoostActive)
+        if (_model.IsAbilityActive)
         {
             _currentBoostPercent = _boostPercent;
         }
@@ -59,7 +59,7 @@ public class SpeedBoostPresenter
         ApplyBoostPercent();
     }
 
-    private void OnBoostIsOver()
+    private void OnAbilityIsOver()
     {
         _currentBoostPercent = _baseBoostPercent;
 
@@ -70,11 +70,11 @@ public class SpeedBoostPresenter
     {
         _view.PlayRunSoundWithBoostPercent(_currentBoostPercent);
         _view.PlayRunAnimationWithBoostPercent(_currentBoostPercent);
-        SetRunSpeedWithBoostPercent(_currentBoostPercent);
+        SetRunSpeedWithBoostPercent();
     }
 
-    private void SetRunSpeedWithBoostPercent(float boostPercent)
+    private void SetRunSpeedWithBoostPercent()
     {
-        _playerMovementHandler.SetSpeed(_defaultSpeed * boostPercent);
+        _playerMovementHandler.SetSpeed(_defaultSpeed * _currentBoostPercent);
     }
 }

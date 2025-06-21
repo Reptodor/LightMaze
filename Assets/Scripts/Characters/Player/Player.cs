@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable
@@ -32,11 +33,17 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] private InputConfig _inputConfig;
     private InputSystem _inputSystem;
 
-    [Header("SpeedBoost")]
-    [SerializeField] private SpeedBoostConfig _speedBoostConfig;
-    [SerializeField] private SpeedBoostView _speedBoostView;
-    private SpeedBoostPresenter _speedBoostPresenter;
+    [Header("SpeedAbility")]
+    [SerializeField] private SpeedAbilityConfig _speedAbilityConfig;
+    [SerializeField] private SpeedAbilityView _speedAbilityView;
+    private SpeedAbilityPresenter _speedAbilityPresenter;
 
+    [Header("TeleportAbility")]
+    [SerializeField] private TeleportAbilityConfig _teleportAbilityConfig;
+    [SerializeField] private TeleportAbilityView _teleportAbilityView;
+    private TeleportAbilityPresenter _teleportAbilityPresenter;
+
+    private CameraHandler _cameraHandler;
     private bool _isInitialized;
 
     public BagHandler BagHandler => _bagHandler;
@@ -72,17 +79,24 @@ public class Player : MonoBehaviour, IDamagable
         if (_inputConfig == null)
             throw new ArgumentNullException(nameof(_inputConfig), "Input config cannot be null");
 
-        if (_speedBoostConfig == null)
-            throw new ArgumentNullException(nameof(_speedBoostConfig), "SpeedBoostConfig cannot be null");
+        if (_speedAbilityConfig == null)
+            throw new ArgumentNullException(nameof(_speedAbilityConfig), "SpeedAbilityConfig cannot be null");
 
-        if (_speedBoostView == null)
-            throw new ArgumentNullException(nameof(_speedBoostView), "SpeedBoostView cannot be null");
+        if (_speedAbilityView == null)
+            throw new ArgumentNullException(nameof(_speedAbilityView), "SpeedAbilityView cannot be null");
+
+        if (_teleportAbilityConfig == null)
+            throw new ArgumentNullException(nameof(_teleportAbilityConfig), "TeleportAbilityConfig cannot be null");
+
+        if (_teleportAbilityView == null)
+            throw new ArgumentNullException(nameof(_teleportAbilityView), "TeleportAbilityView cannot be null");
     }
 
-    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, int keysCount)
+    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, int keysCount)
     {
         InitializeMovement(_movementConfig);
 
+        _cameraHandler = cameraHandler;
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
         _bagHandler = new BagHandler(keysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
@@ -90,6 +104,7 @@ public class Player : MonoBehaviour, IDamagable
         
         InitializeHealth(sceneLoader);
         InitializeSpeedBoost();
+        InitializeDashBoost();
 
         _isInitialized = true;
         OnEnable();
@@ -110,9 +125,16 @@ public class Player : MonoBehaviour, IDamagable
 
     private void InitializeSpeedBoost()
     {
-        _speedBoostView.Initialize(_inputSystem.SpeedBoostKey);
-        SpeedBoostModel speedBoostModel = new SpeedBoostModel(_speedBoostConfig.Duration, _speedBoostConfig.Cooldown);
-        _speedBoostPresenter = new SpeedBoostPresenter(_speedBoostView, speedBoostModel, _movementHandler, _speedBoostConfig.BoostPercent);
+        _speedAbilityView.Initialize(_inputSystem.SpeedAbilityKey);
+        AbilityModel speedBoostModel = new AbilityModel(_speedAbilityConfig.Duration, _speedAbilityConfig.Cooldown);
+        _speedAbilityPresenter = new SpeedAbilityPresenter(_speedAbilityView, speedBoostModel, _movementHandler, _speedAbilityConfig.BoostPercent);
+    }
+
+    private void InitializeDashBoost()
+    {
+        _teleportAbilityView.Initialize(_inputSystem.TeleportAbilityKey);
+        AbilityModel dashBoostModel = new AbilityModel(_teleportAbilityConfig.Duration, _teleportAbilityConfig.Cooldown);
+        _teleportAbilityPresenter = new TeleportAbilityPresenter(_teleportAbilityView, dashBoostModel, _teleportAbilityConfig.ObstacleLayer, _rigidbody2D, _teleportAbilityConfig.TeleportDistance);
     }
 
     private void OnEnable()
@@ -121,17 +143,23 @@ public class Player : MonoBehaviour, IDamagable
             return;
 
         _healthPresenter.Subscribe();
-        _speedBoostPresenter.Subscribe();
+        _speedAbilityPresenter.Subscribe();
+        _teleportAbilityPresenter.Subscribe();
         Damaged += _healthPresenter.OnDamaged;
-        _inputSystem.SpeedBoostKeyPressed += _speedBoostView.OnSpeedBoostKeyPressed;
+        _inputSystem.SpeedAbilityKeyPressed += _speedAbilityView.OnSpeedAbilityKeyPressed;
+        _inputSystem.TeleportAbilityKeyPressed += _teleportAbilityView.OnTeleportAbilityKeyPressed;
+        _inputSystem.CameraStateSwitchKeyPressed += _cameraHandler.OnCameraStateSwitchKeyPressed;
     }
 
     private void OnDisable()
     {
         _healthPresenter.Unsubscribe();
-        _speedBoostPresenter.Unsubscribe();
+        _speedAbilityPresenter.Unsubscribe();
+        _teleportAbilityPresenter.Unsubscribe();
         Damaged -= _healthPresenter.OnDamaged;
-        _inputSystem.SpeedBoostKeyPressed -= _speedBoostView.OnSpeedBoostKeyPressed;
+        _inputSystem.SpeedAbilityKeyPressed -= _speedAbilityView.OnSpeedAbilityKeyPressed;
+        _inputSystem.TeleportAbilityKeyPressed -= _teleportAbilityView.OnTeleportAbilityKeyPressed;
+        _inputSystem.CameraStateSwitchKeyPressed -= _cameraHandler.OnCameraStateSwitchKeyPressed;
     }
 
     private void Update()
@@ -146,7 +174,9 @@ public class Player : MonoBehaviour, IDamagable
         }
 
         _inputSystem.Update();
-        _speedBoostPresenter.Update();
+        _speedAbilityPresenter.Update();
+        _teleportAbilityPresenter.Update();
+        _teleportAbilityPresenter.UpdateMoveDirection(_inputSystem.GetMoveDirection());
         _animationHandler.HandleAnimations(_inputSystem.GetMoveDirection());
     }
 

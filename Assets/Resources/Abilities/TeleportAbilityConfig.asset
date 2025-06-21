@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec37880b95274f249590d603b1ecd52, type: 3}
-  m_Name: FlameBoostConfig
+  m_Script: {fileID: 11500000, guid: 8ef0e192149b8402f97f451a2dbf30e7, type: 3}
+  m_Name: TeleportAbilityConfig
   m_EditorClassIdentifier: 
-  _key: 32
-  _boostPercent: 1.45
-  _duration: 4
-  _cooldown: 5
+  _duration: 1
+  _cooldown: 8
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _teleportDistance: 3

@@ -1,22 +1,16 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBoostConfig", menuName = "Configs/Boost")]
-public class SpeedBoostConfig : ScriptableObject
+public class AbilityConfig : ScriptableObject
 {
-    [SerializeField] private float _boostPercent;
     [SerializeField] private float _duration;
     [SerializeField] private float _cooldown;
 
-    public float BoostPercent => _boostPercent;
     public float Duration => _duration;
     public float Cooldown => _cooldown;
 
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
-        if(_boostPercent <= 0)
-            throw new ArgumentOutOfRangeException(nameof(_boostPercent), "Boost percent must be greater than null");
-        
         if(_duration < 0)
             throw new ArgumentOutOfRangeException(nameof(_duration), "Duration cannot be below zero");
 

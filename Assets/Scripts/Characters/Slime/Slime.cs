@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class Slime : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigidbody2D;
-    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioSource _slimeWalkAudioSource;
     [SerializeField] private int _damage;
     [SerializeField] private float _movementDistance;
     private MovementHandler _movementHandler;
@@ -14,23 +15,27 @@ public class Slime : MonoBehaviour
 
     private void OnValidate()
     {
-        if(_rigidbody2D == null)
-            _rigidbody2D = GetComponent<Rigidbody2D>();
+        if (_rigidbody2D == null)
+            throw new ArgumentNullException(nameof(_rigidbody2D), "Rigidbody2D cannot be null");
+
+        if (_slimeWalkAudioSource == null)
+            throw new ArgumentNullException(nameof(_slimeWalkAudioSource), "SlimeWalkAudioSource cannot be null");
     }
 
     public void Initialize(MovementConfig movementConfig, float movementDistance)
     {
-        _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _audioSource);
-        _rotationHandler = new RotationHandler(transform);
-        InitializeMovement(movementDistance);
+        InitializeMovement(movementConfig, movementDistance);
         _startPosition = transform.position;
         _isInitialized = true;
     }
 
-    private void InitializeMovement(float movementDistance)
+    private void InitializeMovement(MovementConfig movementConfig, float movementDistance)
     {
         if(_movementDistance == 0)
             _movementDistance = movementDistance;
+
+        _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _slimeWalkAudioSource);
+        _rotationHandler = new RotationHandler(transform);
 
         _slimeVelocityDirectionHandler = new SlimeVelocityDirectionHandler(this, _movementDistance);
     }
