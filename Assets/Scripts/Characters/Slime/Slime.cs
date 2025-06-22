@@ -22,18 +22,15 @@ public class Slime : MonoBehaviour
             throw new ArgumentNullException(nameof(_slimeWalkAudioSource), "SlimeWalkAudioSource cannot be null");
     }
 
-    public void Initialize(MovementConfig movementConfig, float movementDistance)
+    public void Initialize(MovementConfig movementConfig)
     {
-        InitializeMovement(movementConfig, movementDistance);
+        InitializeMovement(movementConfig);
         _startPosition = transform.position;
         _isInitialized = true;
     }
 
-    private void InitializeMovement(MovementConfig movementConfig, float movementDistance)
+    private void InitializeMovement(MovementConfig movementConfig)
     {
-        if(_movementDistance == 0)
-            _movementDistance = movementDistance;
-
         _movementHandler = new MovementHandler(movementConfig, _rigidbody2D, _slimeWalkAudioSource);
         _rotationHandler = new RotationHandler(transform);
 

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9517107c5cb564bf6896867b6822c8f3, type: 3}
-  m_Name: CameraFollowingConfig
+  m_Script: {fileID: 11500000, guid: d1da72df5fdbe4be09de9763e9eab7a9, type: 3}
+  m_Name: CameraAbilityConfig
   m_EditorClassIdentifier: 
-  _freePosition: {x: 0.3, y: -14.4, z: -2}
+  _duration: 5
+  _cooldown: 15
   _animationDuration: 1
   _followingOrthoSize: 8
-  _unfollowingOrthoSize: 25

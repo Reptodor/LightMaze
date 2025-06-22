@@ -6,7 +6,6 @@ public class ThirdLevelBootstrap : SecondLevelBootstrap
     [Header("Slime")]
     [SerializeField] private Slime[] _slimes;
     [SerializeField] private MovementConfig _slimeMovementConfig;
-    [SerializeField] private float _slimeMovementDistance;
 
     public override IEnumerator Initialize()
     {
@@ -14,7 +13,7 @@ public class ThirdLevelBootstrap : SecondLevelBootstrap
 
         foreach(Slime slime in _slimes)
         {
-            slime.Initialize(_slimeMovementConfig, _slimeMovementDistance);
+            slime.Initialize(_slimeMovementConfig);
 
             yield return null;
         }

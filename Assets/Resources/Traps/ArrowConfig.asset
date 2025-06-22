@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c43749a483844791a77f6e287b2a8e9, type: 3}
-  m_Name: InputConfig
+  m_Script: {fileID: 11500000, guid: 5056267f4fe6d4077b8f5d610e59cbbe, type: 3}
+  m_Name: ArrowConfig
   m_EditorClassIdentifier: 
-  _speedAbilityKey: 304
-  _teleportAbilityKey: 32
-  _cameraAbilityKey: 102
+  _damage: 1
+  _speed: 5
+  _pauseDuration: 2

@@ -18,10 +18,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private GameObject _spikesTilemap;
 
-    [Header("MobileComponents")]
-    [SerializeField] private Joystick _joystick;
-    [SerializeField] private Canvas _mobileCanvas;
-
     [Header("Quests")]
     [SerializeField] private QuestHandler _questHandler;
     [SerializeField] private QuestAnimationHandlerConfig _questHandlerConfig;
@@ -32,15 +28,24 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Torches")]
     [SerializeField] private HandTorch _baseTorch;
-    [SerializeField] private List<GroundTorch> _baseGroundTorches;
+    [SerializeField] private List<GroundTorch> _groundTorches;
     [SerializeField] private HandTorchConfig _handTorchConfig;
     [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
 
+    [Header("Slimes")]
+    [SerializeField] private Slime[] _slimes;
+    [SerializeField] private MovementConfig _slimeMovementConfig;
+
+    [Header("Arrows")]
+    [SerializeField] private Arrow[] _arrows;
+    [SerializeField] private ArrowConfig _arrowConfig;
+    
     [Header("Keys")]
     [SerializeField] protected Key[] Keys;
 
     [Header("ShakeAnimation")]
     [SerializeField] protected ShakeAnimationConfig ShakeAnimationConfig;
+
 
     private void Awake()
     {
@@ -53,11 +58,11 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _cameraHandler.Initialize(_player, _levelConfig.CameraFreePosition, _levelConfig.CameraUnfollowingOrthoSize);
+        _cameraHandler.Initialize(_player);
 
         yield return null;
 
-        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig.KeysCount);
+        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig);
 
         yield return null;
 
@@ -77,12 +82,26 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        foreach (var baseGroundTorch in _baseGroundTorches)
+        foreach (Slime slime in _slimes)
         {
-            baseGroundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
+            slime.Initialize(_slimeMovementConfig);
 
             yield return null;
         }
+
+        foreach (Arrow arrow in _arrows)
+        {
+            arrow.Initialize(_arrowConfig);
+
+            yield return null;
+        }
+
+        foreach (GroundTorch groundTorch in _groundTorches)
+            {
+                groundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
+
+                yield return null;
+            }
 
         foreach (Key key in Keys)
         {

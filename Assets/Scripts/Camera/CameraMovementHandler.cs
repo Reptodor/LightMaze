@@ -5,7 +5,7 @@ public class CameraMovementHandler
     private CameraHandler _camera;
     private Player _player;
     private CameraMovementConfig _cameraMovementConfig;
-    private bool _isFollowing;
+    private bool _isFollowing = true;
     
     public CameraMovementHandler(CameraHandler cameraHandler, Player player, CameraMovementConfig cameraMovementConfig)
     {

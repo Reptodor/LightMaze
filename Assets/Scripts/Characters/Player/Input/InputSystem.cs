@@ -8,10 +8,11 @@ public class InputSystem
 
     public event Action SpeedAbilityKeyPressed;
     public event Action TeleportAbilityKeyPressed;
-    public event Action CameraStateSwitchKeyPressed;
+    public event Action CameraAbilityKeyPressed;
 
     public KeyCode SpeedAbilityKey => _inputConfig.SpeedAbilityKey;
     public KeyCode TeleportAbilityKey => _inputConfig.TeleportAbilityKey;
+    public KeyCode CameraAbilityKey => _inputConfig.CameraAbilityKey;
 
     public InputSystem(InputConfig inputConfig)
     {
@@ -26,8 +27,8 @@ public class InputSystem
         if (Input.GetKeyDown(_inputConfig.TeleportAbilityKey))
             TeleportAbilityKeyPressed?.Invoke();
 
-        if (Input.GetKeyDown(_inputConfig.CameraStateSwitchKey))
-            CameraStateSwitchKeyPressed?.Invoke();
+        if (Input.GetKeyDown(_inputConfig.CameraAbilityKey))
+            CameraAbilityKeyPressed?.Invoke();
     }
 
     public Vector2 GetMoveDirection()

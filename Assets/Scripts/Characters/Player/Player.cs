@@ -43,6 +43,11 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] private TeleportAbilityView _teleportAbilityView;
     private TeleportAbilityPresenter _teleportAbilityPresenter;
 
+    [Header("CameraAbility")]
+    [SerializeField] private CameraAbilityConfig _cameraAbilityConfig;
+    [SerializeField] private CameraAbilityView _cameraAbilityView;
+    private CameraAbilityPresenter _cameraAbilityPresenter;
+
     private CameraHandler _cameraHandler;
     private bool _isInitialized;
 
@@ -90,21 +95,28 @@ public class Player : MonoBehaviour, IDamagable
 
         if (_teleportAbilityView == null)
             throw new ArgumentNullException(nameof(_teleportAbilityView), "TeleportAbilityView cannot be null");
+
+        if (_cameraAbilityConfig == null)
+            throw new ArgumentNullException(nameof(_cameraAbilityConfig), "CameraAbilityConfig cannot be null");
+
+        if (_cameraAbilityView == null)
+            throw new ArgumentNullException(nameof(_cameraAbilityView), "CameraAbilityView cannot be null");
     }
 
-    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, int keysCount)
+    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, LevelConfig levelConfig)
     {
         InitializeMovement(_movementConfig);
 
         _cameraHandler = cameraHandler;
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
-        _bagHandler = new BagHandler(keysCount, spikesTilemap);
+        _bagHandler = new BagHandler(levelConfig.KeysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
         _inputSystem = new InputSystem(_inputConfig);
         
         InitializeHealth(sceneLoader);
-        InitializeSpeedBoost();
-        InitializeDashBoost();
+        InitializeSpeedAbility();
+        InitializeDashAbility();
+        InitializeCameraAbility(levelConfig.CameraFreePosition, levelConfig.CameraUnfollowingOrthoSize);
 
         _isInitialized = true;
         OnEnable();
@@ -123,18 +135,27 @@ public class Player : MonoBehaviour, IDamagable
         _healthPresenter = new HealthPresenter(healthModel, _healthView, sceneLoader, _animationSwitchingHandler, _healthConfig.DeathTime);
     }
 
-    private void InitializeSpeedBoost()
+    private void InitializeSpeedAbility()
     {
         _speedAbilityView.Initialize(_inputSystem.SpeedAbilityKey);
-        AbilityModel speedBoostModel = new AbilityModel(_speedAbilityConfig.Duration, _speedAbilityConfig.Cooldown);
-        _speedAbilityPresenter = new SpeedAbilityPresenter(_speedAbilityView, speedBoostModel, _movementHandler, _speedAbilityConfig.BoostPercent);
+        AbilityModel speedAbilityModel = new AbilityModel(_speedAbilityConfig.Duration, _speedAbilityConfig.Cooldown);
+        _speedAbilityPresenter = new SpeedAbilityPresenter(_speedAbilityView, speedAbilityModel, _movementHandler, _speedAbilityConfig.BoostPercent);
     }
 
-    private void InitializeDashBoost()
+    private void InitializeDashAbility()
     {
         _teleportAbilityView.Initialize(_inputSystem.TeleportAbilityKey);
-        AbilityModel dashBoostModel = new AbilityModel(_teleportAbilityConfig.Duration, _teleportAbilityConfig.Cooldown);
-        _teleportAbilityPresenter = new TeleportAbilityPresenter(_teleportAbilityView, dashBoostModel, _teleportAbilityConfig.ObstacleLayer, _rigidbody2D, _teleportAbilityConfig.TeleportDistance);
+        AbilityModel dashAbilityModel = new AbilityModel(_teleportAbilityConfig.Duration, _teleportAbilityConfig.Cooldown);
+        _teleportAbilityPresenter = new TeleportAbilityPresenter(_teleportAbilityView, dashAbilityModel, _teleportAbilityConfig.ObstacleLayer, _rigidbody2D, _teleportAbilityConfig.TeleportDistance);
+    }
+
+    private void InitializeCameraAbility(Vector3 cameraFreePosition, float cameraUnfollowingOrthoSize)
+    {
+        _cameraAbilityView.Initialize(_inputSystem.CameraAbilityKey);
+        AbilityModel cameraAbilityModel = new AbilityModel(_cameraAbilityConfig.Duration, _cameraAbilityConfig.Cooldown);
+        _cameraAbilityPresenter = new CameraAbilityPresenter(_cameraAbilityView, cameraAbilityModel, _cameraAbilityConfig,
+                                                             this, cameraFreePosition, _cameraHandler.Camera,
+                                                             _cameraHandler.CameraMovementHandler, cameraUnfollowingOrthoSize);
     }
 
     private void OnEnable()
@@ -145,10 +166,11 @@ public class Player : MonoBehaviour, IDamagable
         _healthPresenter.Subscribe();
         _speedAbilityPresenter.Subscribe();
         _teleportAbilityPresenter.Subscribe();
+        _cameraAbilityPresenter.Subscribe();
         Damaged += _healthPresenter.OnDamaged;
         _inputSystem.SpeedAbilityKeyPressed += _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed += _teleportAbilityView.OnTeleportAbilityKeyPressed;
-        _inputSystem.CameraStateSwitchKeyPressed += _cameraHandler.OnCameraStateSwitchKeyPressed;
+        _inputSystem.CameraAbilityKeyPressed += _cameraAbilityView.OnCameraAbilityKeyPressed;
     }
 
     private void OnDisable()
@@ -156,10 +178,11 @@ public class Player : MonoBehaviour, IDamagable
         _healthPresenter.Unsubscribe();
         _speedAbilityPresenter.Unsubscribe();
         _teleportAbilityPresenter.Unsubscribe();
+        _cameraAbilityPresenter.Unsubscribe();
         Damaged -= _healthPresenter.OnDamaged;
         _inputSystem.SpeedAbilityKeyPressed -= _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed -= _teleportAbilityView.OnTeleportAbilityKeyPressed;
-        _inputSystem.CameraStateSwitchKeyPressed -= _cameraHandler.OnCameraStateSwitchKeyPressed;
+        _inputSystem.CameraAbilityKeyPressed -= _cameraAbilityView.OnCameraAbilityKeyPressed;
     }
 
     private void Update()
@@ -177,6 +200,7 @@ public class Player : MonoBehaviour, IDamagable
         _speedAbilityPresenter.Update();
         _teleportAbilityPresenter.Update();
         _teleportAbilityPresenter.UpdateMoveDirection(_inputSystem.GetMoveDirection());
+        _cameraAbilityPresenter.Update();
         _animationHandler.HandleAnimations(_inputSystem.GetMoveDirection());
     }
 
