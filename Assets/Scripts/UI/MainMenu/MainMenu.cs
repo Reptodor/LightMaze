@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -9,13 +10,24 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button[] _buttons;
     [SerializeField] private MainMenuConfig _mainMenuConfig;
 
+    private SettingsMenu _settingsMenu;
     private SceneLoader _sceneLoader;
     private bool _hasLoadingStarted;
     private bool _isInitialized;
 
-    private void Start()
+    private void OnValidate()
     {
-        _sceneLoader = FindAnyObjectByType<SceneLoader>();
+        if (_buttons.Length == 0)
+            throw new ArgumentOutOfRangeException(nameof(_buttons.Length), "ButtonsLength cannot be zero");
+
+        if (_mainMenuConfig == null)
+            throw new ArgumentNullException(nameof(_mainMenuConfig), "MainMenuConfig cannot be null");
+    }
+
+    public void Initialize(SceneLoader sceneLoader, SettingsMenu settingsMenu)
+    {
+        _sceneLoader = sceneLoader;
+        _settingsMenu = settingsMenu;
         _isInitialized = true;
 
         OnEnable();
@@ -48,11 +60,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        if(_hasLoadingStarted)
-            return;
-
-        _hasLoadingStarted = true;
-        StartCoroutine(Hide());
+        _settingsMenu.gameObject.SetActive(true);
     }
 
     public void Quit()

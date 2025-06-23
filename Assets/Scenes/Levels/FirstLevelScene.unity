@@ -13228,6 +13228,9 @@ MonoBehaviour:
   - {fileID: 1033635636}
   - {fileID: 1399327751}
   _arrowConfig: {fileID: 11400000, guid: 104a3aa8b06454535b862021af18b9fb, type: 2}
+  _interfaceParent: {fileID: 1439938845}
+  _pauseMenuPrefab: {fileID: 1655578332754804909, guid: 7b4128636948d4ed49eb59c8c966fa46, type: 3}
+  _settingsMenuPrefab: {fileID: 903808552279148790, guid: 507cc7c9f63ab4d378b0a7fa6eb559a8, type: 3}
   Keys:
   - {fileID: 8305823986313188848}
   ShakeAnimationConfig: {fileID: 11400000, guid: 3e330485f4feb42e39bdefef26476e75, type: 2}

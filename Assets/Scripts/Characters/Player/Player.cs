@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable
@@ -49,9 +48,11 @@ public class Player : MonoBehaviour, IDamagable
     private CameraAbilityPresenter _cameraAbilityPresenter;
 
     private CameraHandler _cameraHandler;
+    private PauseMenu _pauseMenu;
     private bool _isInitialized;
 
     public BagHandler BagHandler => _bagHandler;
+    public InputSystem InputSystem => _inputSystem;
 
     public event Action<int> Damaged;
 
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour, IDamagable
             throw new ArgumentNullException(nameof(_cameraAbilityView), "CameraAbilityView cannot be null");
     }
 
-    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, LevelConfig levelConfig)
+    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, LevelConfig levelConfig, PauseMenu pauseMenu)
     {
         InitializeMovement(_movementConfig);
 
@@ -112,6 +113,7 @@ public class Player : MonoBehaviour, IDamagable
         _bagHandler = new BagHandler(levelConfig.KeysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
         _inputSystem = new InputSystem(_inputConfig);
+        _pauseMenu = pauseMenu;
         
         InitializeHealth(sceneLoader);
         InitializeSpeedAbility();
@@ -171,6 +173,7 @@ public class Player : MonoBehaviour, IDamagable
         _inputSystem.SpeedAbilityKeyPressed += _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed += _teleportAbilityView.OnTeleportAbilityKeyPressed;
         _inputSystem.CameraAbilityKeyPressed += _cameraAbilityView.OnCameraAbilityKeyPressed;
+        _inputSystem.PauseMenuKeyPressed += _pauseMenu.OnPauseMenuKeyPressed;
     }
 
     private void OnDisable()
@@ -183,6 +186,7 @@ public class Player : MonoBehaviour, IDamagable
         _inputSystem.SpeedAbilityKeyPressed -= _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed -= _teleportAbilityView.OnTeleportAbilityKeyPressed;
         _inputSystem.CameraAbilityKeyPressed -= _cameraAbilityView.OnCameraAbilityKeyPressed;
+        _inputSystem.PauseMenuKeyPressed -= _pauseMenu.OnPauseMenuKeyPressed;
     }
 
     private void Update()

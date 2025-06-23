@@ -65,7 +65,6 @@ public class CameraAbilityPresenter
 
     private void UseAbility()
     {
-        _isFollowing = false;
         Sequence animation = DOTween.Sequence();
 
         animation.Append(_camera.transform.DOMove(_cameraFreePosition, _config.AnimationDuration))
@@ -76,7 +75,6 @@ public class CameraAbilityPresenter
 
     private void OnAbilityIsOver()
     {
-        _isFollowing = true;
         Sequence animation = DOTween.Sequence();
 
         animation.Append(_camera.transform.DOMove(GetEndPosition(), _config.AnimationDuration))

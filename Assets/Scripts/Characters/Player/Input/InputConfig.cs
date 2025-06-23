@@ -7,10 +7,12 @@ public class InputConfig : ScriptableObject
     [SerializeField] private KeyCode _speedAbilityKey;
     [SerializeField] private KeyCode _teleportAbilityKey;
     [SerializeField] private KeyCode _cameraAbilityKey;
+    [SerializeField] private KeyCode _pauseMenuKey;
 
     public KeyCode SpeedAbilityKey => _speedAbilityKey;
     public KeyCode TeleportAbilityKey => _teleportAbilityKey;
     public KeyCode CameraAbilityKey => _cameraAbilityKey;
+    public KeyCode PauseMenuKey => _pauseMenuKey;
 
     private void OnValidate()
     {
@@ -22,5 +24,8 @@ public class InputConfig : ScriptableObject
 
         if (_cameraAbilityKey == KeyCode.None)
             throw new ArgumentOutOfRangeException(nameof(_cameraAbilityKey), "CameraAbilityKey cannot be none");
+
+        if (_pauseMenuKey == KeyCode.None)
+            throw new ArgumentOutOfRangeException(nameof(_pauseMenuKey), "PauseMenuKey cannot be none");
     }
 }

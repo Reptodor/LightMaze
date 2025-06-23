@@ -39,6 +39,11 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [Header("Arrows")]
     [SerializeField] private Arrow[] _arrows;
     [SerializeField] private ArrowConfig _arrowConfig;
+
+    [Header("Menues")]
+    [SerializeField] private Transform _interfaceParent;
+    [SerializeField] private PauseMenu _pauseMenuPrefab;
+    [SerializeField] private SettingsMenu _settingsMenuPrefab;
     
     [Header("Keys")]
     [SerializeField] protected Key[] Keys;
@@ -52,17 +57,24 @@ public class FirtsLevelBootstrap : MonoBehaviour
         StartCoroutine(nameof(Initialize));
     }
 
+
     public virtual IEnumerator Initialize()
     {
         _sceneLoader = FindAnyObjectByType<SceneLoader>();
 
         yield return null;
 
-        _cameraHandler.Initialize(_player);
+        PauseMenu pauseMenu = Instantiate(_pauseMenuPrefab, _interfaceParent);
+        SettingsMenu settingsMenu = Instantiate(_settingsMenuPrefab, _interfaceParent);
+        pauseMenu.Initialize(_sceneLoader, settingsMenu);
 
         yield return null;
 
-        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig);
+        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig, pauseMenu);
+
+        yield return null;
+
+        _cameraHandler.Initialize(_player);
 
         yield return null;
 
@@ -97,11 +109,11 @@ public class FirtsLevelBootstrap : MonoBehaviour
         }
 
         foreach (GroundTorch groundTorch in _groundTorches)
-            {
-                groundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
+        {
+            groundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
 
-                yield return null;
-            }
+            yield return null;
+        }
 
         foreach (Key key in Keys)
         {
