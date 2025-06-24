@@ -22,15 +22,16 @@ public class PauseMenu : MonoBehaviour
 
     public void OnPauseMenuKeyPressed()
     {
-        if (_isActive)
-            _pauseMenuPanel.SetActive(true);
-        else
-            _pauseMenuPanel.SetActive(false);
+        
+        _pauseMenuPanel.SetActive(true);
+        Time.timeScale = 0f;
+        
     }
 
     public void Resume()
     {
         _pauseMenuPanel.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void OpenSettings()
