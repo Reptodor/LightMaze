@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class FirtsLevelBootstrap : MonoBehaviour
@@ -10,9 +9,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Tutorial")]
     [SerializeField] private Tutorial _tutorial;
-
-    [Header("Camera")]
-    [SerializeField] private CameraHandler _cameraHandler;
 
     [Header("Player components")]
     [SerializeField] private Player _player;
@@ -70,11 +66,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _player.Initialize(_spikesTilemap, _sceneLoader, _cameraHandler, _levelConfig, pauseMenu);
-
-        yield return null;
-
-        _cameraHandler.Initialize(_player);
+        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig, pauseMenu);
 
         yield return null;
 

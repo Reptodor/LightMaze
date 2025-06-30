@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef566b9e83b524442a776c739f91a5a0, type: 3}
   m_Name: ThirdLevelConfig
   m_EditorClassIdentifier: 
-  _cameraFreePosition: {x: 5.82, y: -15.2, z: -2}
-  _cameraUnfollowingOrthoSize: 46
-  _keysCount: 7
+  _keysCount: 10

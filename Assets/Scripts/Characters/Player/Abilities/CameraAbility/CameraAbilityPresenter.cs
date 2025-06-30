@@ -1,32 +1,20 @@
-using DG.Tweening;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraAbilityPresenter
 {
     private CameraAbilityView _view;
     private AbilityModel _model;
-    private CameraAbilityConfig _config;
+    private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
 
-    private Player _player;
-    private Vector3 _cameraFreePosition;
-    private Camera _camera;
-    private CameraMovementHandler _cameraMovementHandler;
-    private float _cameraUnfollowingOrthoSize;
-    private bool _isFollowing;
 
-    public CameraAbilityPresenter(CameraAbilityView cameraAbilityView, AbilityModel speedAbilityModel, CameraAbilityConfig cameraAbilityConfig,
-                                  Player player, Vector3 cameraFreePosition, Camera camera, CameraMovementHandler cameraMovementHandler,
-                                  float cameraUnfollowingOrthoSize)
+    public CameraAbilityPresenter(CameraAbilityView cameraAbilityView, AbilityModel cameraAbilityModel,
+                                  CinemachineVirtualCamera unfollowingCinemachineVirtualCamera)
     {
         _view = cameraAbilityView;
-        _model = speedAbilityModel;
-        _config = cameraAbilityConfig;
+        _model = cameraAbilityModel;
+        _unfollowingCinemachineVirtualCamera = unfollowingCinemachineVirtualCamera;
 
-        _player = player;
-        _cameraFreePosition = cameraFreePosition;
-        _camera = camera;
-        _cameraMovementHandler = cameraMovementHandler;
-        _cameraUnfollowingOrthoSize = cameraUnfollowingOrthoSize;
     }
 
     public void Subscribe()
@@ -65,29 +53,11 @@ public class CameraAbilityPresenter
 
     private void UseAbility()
     {
-        Sequence animation = DOTween.Sequence();
-
-        animation.Append(_camera.transform.DOMove(_cameraFreePosition, _config.AnimationDuration))
-                  .Join(_camera.DOOrthoSize(_cameraUnfollowingOrthoSize, _config.AnimationDuration))
-                  .AppendCallback(() => _isFollowing = false)
-                  .AppendCallback(() => _cameraMovementHandler.SetFollowing(_isFollowing));
+        _unfollowingCinemachineVirtualCamera.Priority = 12;
     }
 
     private void OnAbilityIsOver()
     {
-        Sequence animation = DOTween.Sequence();
-
-        animation.Append(_camera.transform.DOMove(GetEndPosition(), _config.AnimationDuration))
-                  .Join(_camera.DOOrthoSize(_config.FollowingOrthoSize, _config.AnimationDuration))
-                  .AppendCallback(() => _isFollowing = true)
-                  .AppendCallback(() => _cameraMovementHandler.SetFollowing(_isFollowing));
-
-    }
-
-    private Vector3 GetEndPosition()
-    {
-        Vector3 endPosition = new Vector3(_player.transform.position.x, _player.transform.position.y, _cameraFreePosition.z);
-
-        return endPosition;
+        _unfollowingCinemachineVirtualCamera.Priority = 8;
     }
 }

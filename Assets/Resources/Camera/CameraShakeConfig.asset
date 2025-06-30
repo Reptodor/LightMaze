@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc492fc6866b240c3a1790574f1c6cdf, type: 3}
-  m_Name: CameraMovementConfig
+  m_Script: {fileID: 11500000, guid: 58ab1509c5e3640dca85ea9298546d2f, type: 3}
+  m_Name: CameraShakeConfig
   m_EditorClassIdentifier: 
-  _offset: {x: 0, y: 0, z: -10}
-  _smoothFactor: 3
+  _intensity: 0.5
+  _duration: 0.3

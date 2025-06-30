@@ -11,13 +11,13 @@ public class RotationHandler
 
     public void HandleRotation(Vector2 velocityDirection)
     {
-        if(velocityDirection.x > 0)
-        {   
-            _transform.localRotation = Quaternion.Euler(0, 180, 0);
-        }
-        if(velocityDirection.x < 0)
+        if (velocityDirection.x > 0)
         {
-            _transform.localRotation = Quaternion.Euler(0, 0, 0);
+            _transform.localScale = new Vector3(-1, 1, 1);
+        }
+        if (velocityDirection.x < 0)
+        {
+            _transform.localScale = new Vector3(1, 1, 1);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable
@@ -45,9 +46,9 @@ public class Player : MonoBehaviour, IDamagable
     [Header("CameraAbility")]
     [SerializeField] private CameraAbilityConfig _cameraAbilityConfig;
     [SerializeField] private CameraAbilityView _cameraAbilityView;
+    [SerializeField] private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
     private CameraAbilityPresenter _cameraAbilityPresenter;
 
-    private CameraHandler _cameraHandler;
     private PauseMenu _pauseMenu;
     private bool _isInitialized;
 
@@ -102,13 +103,15 @@ public class Player : MonoBehaviour, IDamagable
 
         if (_cameraAbilityView == null)
             throw new ArgumentNullException(nameof(_cameraAbilityView), "CameraAbilityView cannot be null");
+
+        if (_unfollowingCinemachineVirtualCamera == null)
+            throw new ArgumentNullException(nameof(_unfollowingCinemachineVirtualCamera), "UnfollowingCinemachineVirtualCamera cannot be null");
     }
 
-    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, CameraHandler cameraHandler, LevelConfig levelConfig, PauseMenu pauseMenu)
+    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, LevelConfig levelConfig, PauseMenu pauseMenu)
     {
         InitializeMovement(_movementConfig);
 
-        _cameraHandler = cameraHandler;
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
         _bagHandler = new BagHandler(levelConfig.KeysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
@@ -118,7 +121,7 @@ public class Player : MonoBehaviour, IDamagable
         InitializeHealth(sceneLoader);
         InitializeSpeedAbility();
         InitializeDashAbility();
-        InitializeCameraAbility(levelConfig.CameraFreePosition, levelConfig.CameraUnfollowingOrthoSize);
+        InitializeCameraAbility();
 
         _isInitialized = true;
         OnEnable();
@@ -151,13 +154,11 @@ public class Player : MonoBehaviour, IDamagable
         _teleportAbilityPresenter = new TeleportAbilityPresenter(_teleportAbilityView, dashAbilityModel, _teleportAbilityConfig.ObstacleLayer, _rigidbody2D, _teleportAbilityConfig.TeleportDistance);
     }
 
-    private void InitializeCameraAbility(Vector3 cameraFreePosition, float cameraUnfollowingOrthoSize)
+    private void InitializeCameraAbility()
     {
         _cameraAbilityView.Initialize(_inputSystem.CameraAbilityKey);
         AbilityModel cameraAbilityModel = new AbilityModel(_cameraAbilityConfig.Duration, _cameraAbilityConfig.Cooldown);
-        _cameraAbilityPresenter = new CameraAbilityPresenter(_cameraAbilityView, cameraAbilityModel, _cameraAbilityConfig,
-                                                             this, cameraFreePosition, _cameraHandler.Camera,
-                                                             _cameraHandler.CameraMovementHandler, cameraUnfollowingOrthoSize);
+        _cameraAbilityPresenter = new CameraAbilityPresenter(_cameraAbilityView, cameraAbilityModel, _unfollowingCinemachineVirtualCamera);
     }
 
     private void OnEnable()

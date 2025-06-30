@@ -7,8 +7,8 @@ public class HealthView : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _playerSpriteRenderer;
     [SerializeField] private AudioSource _hitAudioSource;
-    [SerializeField] private CameraHandler _cameraHandler;
     [SerializeField] private HealthConfig _healthConfig;
+    [SerializeField] private CameraShake _cameraShake;
     [SerializeField] private Image _barFilling;
 
     private void OnValidate()
@@ -19,19 +19,14 @@ public class HealthView : MonoBehaviour
         if (_hitAudioSource == null)
             throw new ArgumentNullException(nameof(_hitAudioSource), "HitAudioSource cannot be null");
 
-        if (_cameraHandler == null)
-            throw new ArgumentNullException(nameof(_cameraHandler), "CameraHandler cannot be null");
-
         if (_healthConfig == null)
             throw new ArgumentNullException(nameof(_healthConfig), "HealthConfig cannot be null");
 
-        if (_barFilling == null)
-            throw new ArgumentNullException(nameof(_barFilling), "HealthBarFilling cannot be null");
-    }
+        if (_cameraShake == null)
+            throw new ArgumentNullException(nameof(_cameraShake), "Camera shake cannot be null");
 
-    public void Initialize()
-    {
-        
+        if (_barFilling == null)
+                throw new ArgumentNullException(nameof(_barFilling), "HealthBarFilling cannot be null");
     }
 
     public void OnHealthChanged(float healthPercentage)
@@ -53,11 +48,10 @@ public class HealthView : MonoBehaviour
 
     private void DamageEffect()
     {
-        _cameraHandler.Shake();
+        _cameraShake.ShakeCamera();
         Sequence animation = DOTween.Sequence();
 
         animation.Append(_playerSpriteRenderer.DOColor(Color.red, _healthConfig.HitAnimationDuration)).
                  Append(_playerSpriteRenderer.DOColor(Color.white, _healthConfig.HitAnimationDuration));
     }
-
 }
