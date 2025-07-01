@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bae67aa5370410982613e4d03f1901, type: 3}
   m_Name: HealthConfig
   m_EditorClassIdentifier: 
+  _healAudioClip: {fileID: 8300000, guid: 3888f9c22361f4f65a33ff7c051e7d06, type: 3}
+  _damageAudioClip: {fileID: 8300000, guid: 3888f9c22361f4f65a33ff7c051e7d06, type: 3}
+  _healEffectColor: {r: 0, g: 1, b: 0, a: 1}
+  _damageEffectColor: {r: 1, g: 0, b: 0, a: 1}
   _maxHealth: 6
   _deathTime: 2
   _hitAnimationDuration: 0.2

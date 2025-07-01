@@ -56,6 +56,7 @@ public class Player : MonoBehaviour, IDamagable
     public InputSystem InputSystem => _inputSystem;
 
     public event Action<int> Damaged;
+    public event Action<int> Healed;
 
     private void OnValidate()
     {
@@ -117,7 +118,7 @@ public class Player : MonoBehaviour, IDamagable
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
         _inputSystem = new InputSystem(_inputConfig);
         _pauseMenu = pauseMenu;
-        
+
         InitializeHealth(sceneLoader);
         InitializeSpeedAbility();
         InitializeDashAbility();
@@ -171,6 +172,7 @@ public class Player : MonoBehaviour, IDamagable
         _teleportAbilityPresenter.Subscribe();
         _cameraAbilityPresenter.Subscribe();
         Damaged += _healthPresenter.OnDamaged;
+        Healed += _healthPresenter.OnHealed;
         _inputSystem.SpeedAbilityKeyPressed += _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed += _teleportAbilityView.OnTeleportAbilityKeyPressed;
         _inputSystem.CameraAbilityKeyPressed += _cameraAbilityView.OnCameraAbilityKeyPressed;
@@ -184,6 +186,7 @@ public class Player : MonoBehaviour, IDamagable
         _teleportAbilityPresenter.Unsubscribe();
         _cameraAbilityPresenter.Unsubscribe();
         Damaged -= _healthPresenter.OnDamaged;
+        Healed -= _healthPresenter.OnHealed;
         _inputSystem.SpeedAbilityKeyPressed -= _speedAbilityView.OnSpeedAbilityKeyPressed;
         _inputSystem.TeleportAbilityKeyPressed -= _teleportAbilityView.OnTeleportAbilityKeyPressed;
         _inputSystem.CameraAbilityKeyPressed -= _cameraAbilityView.OnCameraAbilityKeyPressed;
@@ -211,15 +214,15 @@ public class Player : MonoBehaviour, IDamagable
 
     private void FixedUpdate()
     {
-        if(!_isInitialized)
+        if (!_isInitialized)
             return;
 
-        if(!_healthPresenter.IsAlive)
+        if (!_healthPresenter.IsAlive)
         {
             _movementHandler.HandleMovementWithSound(Vector2.zero);
             return;
         }
-        
+
         _movementHandler.HandleMovementWithSound(_inputSystem.GetMoveDirection().normalized);
         _rotationHandler.HandleRotation(_inputSystem.GetMoveDirection());
     }
@@ -228,4 +231,9 @@ public class Player : MonoBehaviour, IDamagable
     {
         Damaged?.Invoke(damage);
     }
-}
+
+    public void Heal(int healAmount)
+    {
+        Healed?.Invoke(healAmount);
+    }
+}   

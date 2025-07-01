@@ -41,6 +41,11 @@ public class HealthPresenter
         _healthModel.TakeDamage(damage);
     }
 
+    public void OnHealed(int healAmount)
+    {
+        _healthModel.Heal(healAmount);
+    }
+
     private void OnDied()
     {
         _coroutine = Coroutines.StartRoutine(Die());
