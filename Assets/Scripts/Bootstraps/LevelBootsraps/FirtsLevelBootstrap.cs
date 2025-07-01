@@ -7,9 +7,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [Header("Level")]
     [SerializeField] private LevelConfig _levelConfig;
 
-    [Header("Tutorial")]
-    [SerializeField] private Tutorial _tutorial;
-
     [Header("Player components")]
     [SerializeField] private Player _player;
     [SerializeField] private GameObject _spikesTilemap;
@@ -79,10 +76,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
         yield return null;
 
         _exitHandler.Initialize(_sceneLoader, _questHandler);
-
-        yield return null;
-
-        _tutorial.Open();
 
         yield return null;
 

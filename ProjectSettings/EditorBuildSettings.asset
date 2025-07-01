@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BootAndMainMenuBackgroundScene.unity
     guid: a86904aab155845dbb485c10c1956b80
+  - enabled: 1
+    path: Assets/Scenes/Levels/ThirdLevelScene.unity
+    guid: e1b75cf6b28534fa9a8441b7af58a996
   m_configObjects: {}
