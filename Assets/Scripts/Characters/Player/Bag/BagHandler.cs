@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class BagHandler
 {
-    private readonly BagConfig _bagConfig;
     private readonly GameObject _spikesTilemap;
+    private readonly int _keysCount;
     private int _currentKeysCount = 0;
     private int _remainingKeysCount;
 
     public int RemainingKeysCount => _remainingKeysCount;
 
-    public BagHandler(BagConfig bagConfig, GameObject spikesTilemap)
+    public BagHandler(int keysCount, GameObject spikesTilemap)
     {
-        _bagConfig = bagConfig;
+        _keysCount = keysCount;
         _spikesTilemap = spikesTilemap;
-        _remainingKeysCount = _bagConfig.KeysCount;
+        _remainingKeysCount = _keysCount;
     }
 
     public bool IsEnoughKeys()
     {
-        if(_currentKeysCount < _bagConfig.KeysCount)
+        if(_currentKeysCount < _keysCount)
             return false;
 
         return true;

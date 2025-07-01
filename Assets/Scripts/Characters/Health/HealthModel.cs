@@ -1,35 +1,50 @@
 using System;
-using UnityEngine;
 
 public class HealthModel
 {
-    private HealthConfig _healthConfig;
-    private int _maxValue;
-    private int _currentValue;
+    private int _maxHealth;
+    private int _currentHealth;
 
-    public int CurrentValue => _currentValue;
+    public int CurrentHealth => _currentHealth;
 
-    public event Action<float> ValueChanged;
+    public event Action<float, string> HealthChanged;
+    public event Action Died;
 
-    public HealthModel(HealthConfig healthConfig)
+    public HealthModel(int maxValue)
     {
-        if (healthConfig == null)
-            throw new ArgumentNullException(nameof(healthConfig), "Health config cannot be null");
-
-        _healthConfig = healthConfig;
-        _maxValue = _healthConfig.MaxValue;
-        _currentValue = _maxValue;
+        _maxHealth = maxValue;
+        _currentHealth = _maxHealth;
     }
 
-    public void ReduceValue(int damage)
+    public void Heal(int healAmount)
     {
-        _currentValue -= damage;
-        Debug.Log($"{_currentValue},{_maxValue},{GetCurrentValuePercentage()}");
-        ValueChanged?.Invoke(GetCurrentValuePercentage());
+        if (healAmount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(healAmount), "HealAmount must be greater than 0");
+
+        _currentHealth += healAmount;
+        HealthChanged?.Invoke(GetCurrentHealthPercentage(), "Heal");
+
+        if (_currentHealth >= _maxHealth)
+            _currentHealth = _maxHealth;
     }
 
-    private float GetCurrentValuePercentage()
+    public void TakeDamage(int damage)
     {
-        return (float)_currentValue / _maxValue;
+        if (_currentHealth <= 0 || damage == 0)
+            return;
+
+        if (damage < 0)
+            throw new ArgumentOutOfRangeException(nameof(damage), "Damage cannot be below zero");
+
+        _currentHealth -= damage;
+        HealthChanged?.Invoke(GetCurrentHealthPercentage(), "Damage");
+
+        if (_currentHealth <= 0)
+            Died?.Invoke();
+    }
+
+    private float GetCurrentHealthPercentage()
+    {
+        return (float)_currentHealth / _maxHealth;
     }
 }

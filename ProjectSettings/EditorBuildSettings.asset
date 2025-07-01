@@ -9,20 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: d2abb9e2598694f8bb3de42b56748b70
   - enabled: 1
+    path: Assets/Scenes/Menu/BootMenuScene.unity
+    guid: a736a25bbe1314a6e804532c1cf8134d
+  - enabled: 1
     path: Assets/Scenes/Levels/FirstLevelScene.unity
     guid: 5c37bc381b4b542f5b91d35286346eef
   - enabled: 1
-    path: Assets/Scenes/Levels/FourthLevelScene.unity
-    guid: 180884546fdf749aca8ddddb3ddf2e74
-  - enabled: 1
     path: Assets/Scenes/Levels/SecondLevelScene.unity
-    guid: 0d1e9742a067d450ab4848de23e90486
-  - enabled: 1
-    path: Assets/Scenes/Levels/ThirdLevelScene.unity
-    guid: a9bd034a7722748a4953ac1b50fd3006
-  - enabled: 1
-    path: Assets/Scenes/Menu/BootMenuScene.unity
-    guid: a736a25bbe1314a6e804532c1cf8134d
+    guid: 4cb3a89548a9948fc8671cd3da025586
   - enabled: 1
     path: Assets/Scenes/Menu/LoadingScreenScene.unity
     guid: f812b6ca4d9e6437b835ab3ac174baba
@@ -30,12 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu/MainMenuScene.unity
     guid: 80e99ef4617ec4090b96fe97189354ef
   - enabled: 1
-    path: Assets/Scenes/Menu/PauseMenuScene.unity
-    guid: cd6b34aee8d4d4e0b8627240e6d1f497
-  - enabled: 1
-    path: Assets/Scenes/Menu/SettingsMenuScene.unity
-    guid: b3b108e539a614be69eeb8e308f17013
-  - enabled: 1
     path: Assets/Scenes/BootAndMainMenuBackgroundScene.unity
     guid: a86904aab155845dbb485c10c1956b80
+  - enabled: 1
+    path: Assets/Scenes/Levels/ThirdLevelScene.unity
+    guid: e1b75cf6b28534fa9a8441b7af58a996
   m_configObjects: {}

@@ -1,59 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
-using TMPro;
 using UnityEngine;
 
 public class FirtsLevelBootstrap : MonoBehaviour
 {
-    [Header("Tutorial")]
-    [SerializeField] private Tutorial _tutorial;
-
-    [Header("Camera")]
-    [SerializeField] private CameraHandler _cameraHandler;
-    [SerializeField] private CameraHandlerConfig _cameraHandlerConfig;
+    [Header("Level")]
+    [SerializeField] private LevelConfig _levelConfig;
 
     [Header("Player components")]
     [SerializeField] private Player _player;
-    [SerializeField] private HealthView _healthView;
     [SerializeField] private GameObject _spikesTilemap;
-
-    [Header("MobileComponents")]
-    [SerializeField] private Joystick _joystick;
-    [SerializeField] private Canvas _mobileCanvas;
-
-    [Header("Torches")]
-    [SerializeField] private HandTorch _baseTorch;
-    [SerializeField] private List<GroundTorch> _baseGroundTorches;
-    [SerializeField] private HandTorchConfig _handTorchConfig;
-    [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
-
-    [Header("Exit")]
-    [SerializeField] private ExitHandler _exitHandler;
-    private SceneLoader _sceneLoader;
 
     [Header("Quests")]
     [SerializeField] private QuestHandler _questHandler;
     [SerializeField] private QuestAnimationHandlerConfig _questHandlerConfig;
 
+    [Header("Exit")]
+    [SerializeField] private ExitHandler _exitHandler;
+    private SceneLoader _sceneLoader;
+
+    [Header("Torches")]
+    [SerializeField] private HandTorch _baseTorch;
+    [SerializeField] private List<GroundTorch> _groundTorches;
+    [SerializeField] private HandTorchConfig _handTorchConfig;
+    [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
+
+    [Header("Slimes")]
+    [SerializeField] private Slime[] _slimes;
+    [SerializeField] private MovementConfig _slimeMovementConfig;
+
+    [Header("Arrows")]
+    [SerializeField] private Arrow[] _arrows;
+    [SerializeField] private ArrowConfig _arrowConfig;
+
+    [Header("Menues")]
+    [SerializeField] private Transform _interfaceParent;
+    [SerializeField] private PauseMenu _pauseMenuPrefab;
+    [SerializeField] private SettingsMenu _settingsMenuPrefab;
+    
     [Header("Keys")]
     [SerializeField] protected Key[] Keys;
 
     [Header("ShakeAnimation")]
     [SerializeField] protected ShakeAnimationConfig ShakeAnimationConfig;
 
-    [Header("Boosts")]
-    [SerializeField] private SpeedBoostHandler _speedBoost;
-    [SerializeField] private FlameBoostHandler _flameBoost;
-    [SerializeField] private BoostConfig _speedBoostConfig;
-    [SerializeField] private BoostConfig _flameBoostConfig;
-    [SerializeField] private TextMeshProUGUI _speedBoostKey;
-    [SerializeField] private TextMeshProUGUI _flameBoostKey;
 
     private void Awake()
     {
         StartCoroutine(nameof(Initialize));
     }
+
 
     public virtual IEnumerator Initialize()
     {
@@ -61,24 +57,17 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _cameraHandler.Initialize(_cameraHandlerConfig, _player);
+        PauseMenu pauseMenu = Instantiate(_pauseMenuPrefab, _interfaceParent);
+        SettingsMenu settingsMenu = Instantiate(_settingsMenuPrefab, _interfaceParent);
+        pauseMenu.Initialize(_sceneLoader, settingsMenu);
 
         yield return null;
 
-        _player.Initialize(_healthView, _spikesTilemap, _sceneLoader, _cameraHandler, ChooseAndGetInputSystem());
+        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig, pauseMenu);
 
         yield return null;
 
-        _baseTorch.Initialize(_handTorchConfig, _player, _flameAnimationsConfig);
-
-        yield return null;
-
-        foreach (var baseGroundTorch in _baseGroundTorches)
-        {
-            baseGroundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
-
-            yield return null;
-        }
+        _baseTorch.Initialize(_player, _flameAnimationsConfig);
 
         yield return null;
 
@@ -90,46 +79,32 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
+        foreach (Slime slime in _slimes)
+        {
+            slime.Initialize(_slimeMovementConfig);
+
+            yield return null;
+        }
+
+        foreach (Arrow arrow in _arrows)
+        {
+            arrow.Initialize(_arrowConfig);
+
+            yield return null;
+        }
+
+        foreach (GroundTorch groundTorch in _groundTorches)
+        {
+            groundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
+
+            yield return null;
+        }
+
         foreach (Key key in Keys)
         {
             key.Initialize(ShakeAnimationConfig);
 
             yield return null;
         }
-
-        _speedBoost.Initialize(_speedBoostConfig, _player.MovementHandler);
-
-        yield return null;
-
-        _flameBoost.Initialize(_flameBoostConfig, _baseTorch);
-
-        yield return null;
-
-        if (SystemInfo.deviceType == DeviceType.Desktop)
-        {
-            _tutorial?.transform.DOScale(7, 1).From(0).SetEase(Ease.OutBounce);
-            _flameBoostKey.gameObject.SetActive(true);
-            _speedBoostKey.gameObject.SetActive(true);
-            _flameBoostKey.text = _flameBoostConfig.Key.ToString();
-            _speedBoostKey.text = _speedBoostConfig.Key.ToString();
-        }
-        else
-        {
-            _tutorial.gameObject.SetActive(false);
-        }
-    }
-
-    private IInput ChooseAndGetInputSystem()
-    {
-        IInput input = new DesktopInputHandler();
-        _mobileCanvas.gameObject.SetActive(false);
-
-        if (SystemInfo.deviceType == DeviceType.Handheld)
-        {
-            _mobileCanvas.gameObject.SetActive(true);
-            input = new MobileInputHandler(_joystick);
-        }
-
-        return input;
     }
 }

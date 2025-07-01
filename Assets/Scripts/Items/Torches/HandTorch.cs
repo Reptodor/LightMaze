@@ -1,25 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class HandTorch : MonoBehaviour
 {
+    [SerializeField] private HandTorchConfig _handTorchConfig;
     [SerializeField] private Light2D _flame;
-    private HandTorchConfig _handTorchConfig;
     private FlameAnimationsHandler _flameAnimationsHandler;
     private Player _player;
     private float _angle = 0;
     private bool _isInitialized = false;
 
-    public Light2D Flame => _flame;
-
     private void OnValidate()
     {
-        _flame = GetComponentInChildren<Light2D>();
+        if (_flame == null)
+            throw new ArgumentNullException(nameof(_flame), "Flame cannot be null");
+
+        if (_handTorchConfig == null)
+            throw new ArgumentNullException(nameof(_handTorchConfig), "Hand torch config cannot be null");
     }
 
-    public void Initialize(HandTorchConfig handTorchConfig, Player player, FlameAnimationsConfig flameAnimationsConfig)
+    public void Initialize(Player player, FlameAnimationsConfig flameAnimationsConfig)
     {
-        _handTorchConfig = handTorchConfig;
         _player = player;
         _flameAnimationsHandler = new FlameAnimationsHandler(flameAnimationsConfig, _flame);
         _flameAnimationsHandler.HandleActivationAnimation();

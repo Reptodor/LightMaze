@@ -3,20 +3,19 @@ using UnityEngine;
 
 public class ThirdLevelBootstrap : SecondLevelBootstrap
 {
-    [Header("Slime")]
-    [SerializeField] private Slime[] _slimes;
-    [SerializeField] private MovementConfig _slimeMovementConfig;
-    [SerializeField] private float _slimeMovementDistance;
+    [Header("Mines")]
+    [SerializeField] private Mine[] _mines;
+    [SerializeField] private Explosion _explosion;
 
     public override IEnumerator Initialize()
     {
         yield return base.Initialize();
 
-        foreach(Slime slime in _slimes)
-        {
-            slime.Initialize(_slimeMovementConfig, _slimeMovementDistance);
+        yield return null;
 
-            yield return null;
+        foreach (Mine mine in _mines)
+        {
+            mine.Initialize(_explosion);
         }
     }
 }
