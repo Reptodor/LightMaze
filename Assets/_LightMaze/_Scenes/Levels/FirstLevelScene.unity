@@ -9535,6 +9535,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseHandTorch (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 32183645667549876, guid: f02abebea94824cc081a14f55d3dafd6, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5042315838345708005, guid: f02abebea94824cc081a14f55d3dafd6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.94
@@ -9574,6 +9578,10 @@ PrefabInstance:
     - target: {fileID: 5042315838345708005, guid: f02abebea94824cc081a14f55d3dafd6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5324056090021828814, guid: f02abebea94824cc081a14f55d3dafd6, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7612068350877083693, guid: f02abebea94824cc081a14f55d3dafd6, type: 3}
       propertyPath: _handTorchConfig
@@ -9755,6 +9763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8961752707291990636, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9776,7 +9788,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &231091291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11845,6 +11857,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8961752707291990636, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13634,7 +13650,7 @@ GameObject:
   - component: {fileID: 695824969}
   - component: {fileID: 695824971}
   - component: {fileID: 695824972}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14104,7 +14120,7 @@ GameObject:
   - component: {fileID: 836585952}
   - component: {fileID: 836585953}
   - component: {fileID: 836585954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -14208,7 +14224,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -15449,6 +15465,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 688622202}
     m_Modifications:
+    - target: {fileID: 1436057879588439518, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3953499274341920738, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7691801428680932521, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.32139727
@@ -15490,12 +15514,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: _speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: _damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: _distance
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: _movementDistance
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: _playerLayer.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600797265081848998, guid: 96521e91950a54f068036750c5b1e228, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 192
       objectReference: {fileID: 0}
     - target: {fileID: 8961752707291990636, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: m_Name
@@ -15529,7 +15569,7 @@ GameObject:
   - component: {fileID: 1391341712}
   - component: {fileID: 1391341711}
   - component: {fileID: 1391341713}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerSkin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

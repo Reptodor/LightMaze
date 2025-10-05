@@ -289,8 +289,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7691801428680932521}
-  - component: {fileID: 8600797265081848998}
   - component: {fileID: 3953499274341920738}
+  - component: {fileID: 1436057879588439518}
+  - component: {fileID: 8600797265081848998}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -315,22 +316,6 @@ Transform:
   - {fileID: 2617915828344620550}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8600797265081848998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8961752707291990636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb3d9ce24928e41d986a37ecdbe7fb22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rigidbody2D: {fileID: 3953499274341920738}
-  _slimeWalkAudioSource: {fileID: 5018424264222710926}
-  _damage: 0
-  _movementDistance: 5
 --- !u!50 &3953499274341920738
 Rigidbody2D:
   serializedVersion: 4
@@ -358,3 +343,59 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &1436057879588439518
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961752707291990636}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.1660304}
+  serializedVersion: 2
+  m_Radius: 0.3339696
+--- !u!114 &8600797265081848998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961752707291990636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3d9ce24928e41d986a37ecdbe7fb22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  chaseSpeed: 3.5
+  visionRange: 5
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRange: 0.5
+  attackDamage: 1
+  attackCooldown: 1

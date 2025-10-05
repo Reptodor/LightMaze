@@ -77,7 +77,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         foreach (Slime slime in _slimes)
         {
-            slime.Initialize(_slimeMovementConfig);
+            slime.Initialize(_player);
 
             yield return null;
         }
