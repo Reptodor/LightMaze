@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7992804435800444816}
   - component: {fileID: 3813640527578040284}
   - component: {fileID: 3695949336662943724}
+  - component: {fileID: 6427883272522994389}
   m_Layer: 0
   m_Name: AdvancedBouncingArrow
   m_TagString: Untagged
@@ -145,8 +146,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 104a3aa8b06454535b862021af18b9fb, type: 2}
   _isFlyVertical: 0
-  _trailParticles: {fileID: 0}
   _wallLayerMask:
     serializedVersion: 2
     m_Bits: 192
   _detectionOffset: 0.1
+--- !u!114 &6427883272522994389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179064007893260028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169bb722944cd45f480dd5cda61acc0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1

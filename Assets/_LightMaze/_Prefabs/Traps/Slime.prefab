@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 3953499274341920738}
   - component: {fileID: 1436057879588439518}
   - component: {fileID: 8600797265081848998}
+  - component: {fileID: 2011938203634046884}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -342,7 +343,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &1436057879588439518
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -390,12 +391,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb3d9ce24928e41d986a37ecdbe7fb22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  chaseSpeed: 3.5
-  visionRange: 5
-  obstacleLayer:
+  _stopDistance: 0.5
+  _chaseSpeed: 8
+  _visionRange: 5
+  _obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
-  attackRange: 0.5
-  attackDamage: 1
-  attackCooldown: 1
+    m_Bits: 192
+--- !u!114 &2011938203634046884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961752707291990636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169bb722944cd45f480dd5cda61acc0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _cooldownTime: 1

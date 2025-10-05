@@ -41,6 +41,7 @@ public class PauseMenu : MonoBehaviour
 
     public void BackToMainMenu()
     {
+        Time.timeScale = 1f;
         _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.MainMenuSceneName,
                                                 _sceneLoader.ScenesLoadingTimeConfig.MainMenuSceneLoadingTime);
     }

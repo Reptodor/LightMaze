@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e67ea91b36b24733ab734e56b9e7fa7, type: 3}
   m_Name: MainMenuConfig
   m_EditorClassIdentifier: 
-  _buttonsSize: 10
+  _buttonsSize: 8
   _appearanceDuration: 0.8
   _interval: -0.7
-  _loadingTime: 3
-  _gameplaySceneName: FirstLevelScene
-  _settingsSceneName: InitScene

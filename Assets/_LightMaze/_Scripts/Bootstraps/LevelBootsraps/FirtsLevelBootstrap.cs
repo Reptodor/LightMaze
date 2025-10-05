@@ -27,7 +27,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
     [Header("Slimes")]
     [SerializeField] private Slime[] _slimes;
-    [SerializeField] private MovementConfig _slimeMovementConfig;
 
     [Header("Menues")]
     [SerializeField] private Transform _interfaceParent;

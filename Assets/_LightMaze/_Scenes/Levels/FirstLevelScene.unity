@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9765,7 +9764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8961752707291990636, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9788,7 +9787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &231091291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11859,7 +11858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8961752707291990636, guid: 96521e91950a54f068036750c5b1e228, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13202,7 +13201,6 @@ MonoBehaviour:
   - {fileID: 1742024134}
   - {fileID: 1117691241}
   - {fileID: 1471650112}
-  _slimeMovementConfig: {fileID: 11400000, guid: 5f076596cf24341418236f2ef4d572d9, type: 2}
   _interfaceParent: {fileID: 1439938845}
   _pauseMenuPrefab: {fileID: 1655578332754804909, guid: 7b4128636948d4ed49eb59c8c966fa46, type: 3}
   _settingsMenuPrefab: {fileID: 903808552279148790, guid: 507cc7c9f63ab4d378b0a7fa6eb559a8, type: 3}
@@ -13650,6 +13648,7 @@ GameObject:
   - component: {fileID: 695824969}
   - component: {fileID: 695824971}
   - component: {fileID: 695824972}
+  - component: {fileID: 695824973}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -13689,7 +13688,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.037063837, y: -0.47673336}
+  m_Offset: {x: -0.037063837, y: -0.50947577}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -13700,7 +13699,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.67344904, y: 0.24806172}
+  m_Size: {x: 0.67344904, y: 0.31354654}
   m_EdgeRadius: 0
 --- !u!4 &695824970
 Transform:
@@ -13774,6 +13773,51 @@ MonoBehaviour:
   _cameraAbilityConfig: {fileID: 11400000, guid: 739639bed59bc4767b1f07cde37e9351, type: 2}
   _cameraAbilityView: {fileID: 467172666}
   _unfollowingCinemachineVirtualCamera: {fileID: 352396756}
+--- !u!61 &695824973
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695824968}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.037108153, y: -0.069850564}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.60272473, y: 0.8602989}
+  m_EdgeRadius: 0
 --- !u!1001 &783917653
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14239,12 +14283,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!114 &836585950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15567,7 +15611,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1391341710}
   - component: {fileID: 1391341712}
-  - component: {fileID: 1391341711}
   - component: {fileID: 1391341713}
   m_Layer: 9
   m_Name: PlayerSkin
@@ -15591,51 +15634,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 695824970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1391341711
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391341709}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.035448313, y: -0.15090692}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4, y: 4}
-    newSize: {x: 2, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.6071496, y: 1.0284784}
-  m_EdgeRadius: 0
 --- !u!212 &1391341712
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -18389,7 +18387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3174474738974454041, guid: 3e78dd2d017ed41a8bc3f9137ea03248, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.11
       objectReference: {fileID: 0}
     - target: {fileID: 3174474738974454041, guid: 3e78dd2d017ed41a8bc3f9137ea03248, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18430,6 +18428,10 @@ PrefabInstance:
     - target: {fileID: 4973579782559927447, guid: 3e78dd2d017ed41a8bc3f9137ea03248, type: 3}
       propertyPath: pauseDuration
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6427883272522994389, guid: 3e78dd2d017ed41a8bc3f9137ea03248, type: 3}
+      propertyPath: _cooldownTime
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
