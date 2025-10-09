@@ -6,6 +6,8 @@ using UnityEngine.Rendering.Universal;
 public class Key : MonoBehaviour
 {
     [SerializeField] private Light2D _light2D;
+    [SerializeField] private ShakeAnimationConfig _shakeAnimationConfig;
+
     private ShakeAnimationHandler _shakeAnimationHandler;
     private Tween _enableLightTween;
     private bool _isInitialized;
@@ -20,9 +22,9 @@ public class Key : MonoBehaviour
             throw new ArgumentNullException(nameof(_light2D), "Light2D cannot be null");
     }
 
-    public void Initialize(ShakeAnimationConfig shakeAnimationConfig)
+    private void Awake()
     {
-        _shakeAnimationHandler = new ShakeAnimationHandler(shakeAnimationConfig, transform);
+        _shakeAnimationHandler = new ShakeAnimationHandler(_shakeAnimationConfig, transform);
 
         _isInitialized = true;
         OnEnable();

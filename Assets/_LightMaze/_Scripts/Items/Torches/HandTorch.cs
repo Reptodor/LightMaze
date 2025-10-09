@@ -5,7 +5,9 @@ using UnityEngine.Rendering.Universal;
 public class HandTorch : MonoBehaviour
 {
     [SerializeField] private HandTorchConfig _handTorchConfig;
+    [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
     [SerializeField] private Light2D _flame;
+    
     private FlameAnimationsHandler _flameAnimationsHandler;
     private Player _player;
     private float _angle = 0;
@@ -20,10 +22,10 @@ public class HandTorch : MonoBehaviour
             throw new ArgumentNullException(nameof(_handTorchConfig), "Hand torch config cannot be null");
     }
 
-    public void Initialize(Player player, FlameAnimationsConfig flameAnimationsConfig)
+    public void Initialize(Player player)
     {
         _player = player;
-        _flameAnimationsHandler = new FlameAnimationsHandler(flameAnimationsConfig, _flame);
+        _flameAnimationsHandler = new FlameAnimationsHandler(_flameAnimationsConfig, _flame);
         _flameAnimationsHandler.HandleActivationAnimation();
 
         _isInitialized = true;

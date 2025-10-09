@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class FirtsLevelBootstrap : MonoBehaviour
@@ -19,11 +20,8 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private ExitHandler _exitHandler;
     private SceneLoader _sceneLoader;
 
-    [Header("Torches")]
+    [Header("Torch")]
     [SerializeField] private HandTorch _baseTorch;
-    [SerializeField] private List<GroundTorch> _groundTorches;
-    [SerializeField] private HandTorchConfig _handTorchConfig;
-    [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
 
     [Header("Slimes")]
     [SerializeField] private Slime[] _slimes;
@@ -32,19 +30,11 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [SerializeField] private Transform _interfaceParent;
     [SerializeField] private PauseMenu _pauseMenuPrefab;
     [SerializeField] private SettingsMenu _settingsMenuPrefab;
-    
-    [Header("Keys")]
-    [SerializeField] protected Key[] Keys;
-
-    [Header("ShakeAnimation")]
-    [SerializeField] protected ShakeAnimationConfig ShakeAnimationConfig;
-
 
     private void Awake()
     {
         StartCoroutine(nameof(Initialize));
     }
-
 
     public virtual IEnumerator Initialize()
     {
@@ -62,7 +52,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _baseTorch.Initialize(_player, _flameAnimationsConfig);
+        _baseTorch.Initialize(_player);
 
         yield return null;
 
@@ -76,21 +66,7 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         foreach (Slime slime in _slimes)
         {
-            slime.Initialize(_player);
-
-            yield return null;
-        }
-
-        foreach (GroundTorch groundTorch in _groundTorches)
-        {
-            groundTorch.Initialize(_flameAnimationsConfig, ShakeAnimationConfig);
-
-            yield return null;
-        }
-
-        foreach (Key key in Keys)
-        {
-            key.Initialize(ShakeAnimationConfig);
+            slime?.Initialize(_player);
 
             yield return null;
         }

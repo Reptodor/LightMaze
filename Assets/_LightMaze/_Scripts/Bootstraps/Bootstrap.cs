@@ -1,20 +1,17 @@
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {   
-    [SerializeField] private SceneNamesConfig _sceneNamesConfig;
+    [SerializeField] private LoadingScreen _loadingScreenPrefab;
     [SerializeField] private SceneLoader _sceneLoader;
 
     private void Awake()
     {
-        _sceneLoader.LoadSceneWithOutLoadingScreen(_sceneNamesConfig.LoadingScreenSceneName);
-        _sceneLoader.LoadSceneWithOutLoadingScreen(_sceneNamesConfig.BootMenuSceneName);
-    }
+        LoadingScreen loadingScreen = Instantiate(_loadingScreenPrefab);
+        loadingScreen.gameObject.SetActive(false);
 
-    private void Start()
-    {
-        LoadingScreen loadingMenu = FindObjectOfType<LoadingScreen>();
-        loadingMenu.gameObject.SetActive(false);
-        _sceneLoader.Initialize(loadingMenu);
-    } 
+        _sceneLoader.Initialize(loadingScreen);
+        _sceneLoader.LoadSplashScreen();
+    }
 }

@@ -2,52 +2,63 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+namespace LightMaze._Scripts.SceneLoader
 {
-    [SerializeField] private SceneNamesConfig _sceneNamesConfig;
-    [SerializeField] private ScenesLoadingTimeConfig _scenesLoadingTimeConfig;
-
-    private LoadingScreen _loadingMenu;
-    private string _currentSceneName = "BootMenuScene";
-
-    public SceneNamesConfig SceneNamesConfig => _sceneNamesConfig;
-    public ScenesLoadingTimeConfig ScenesLoadingTimeConfig => _scenesLoadingTimeConfig;
-
-    public void Initialize(LoadingScreen loadingMenu)
+    public class SceneLoader : MonoBehaviour
     {
-        _loadingMenu = loadingMenu;
+        [SerializeField] private float _mainMenuLoadingTime = 2f;
+        [SerializeField] private float _gameplayLoadingTime = 3f;
+
+        private GameScenes _gameScenes;
+
+        private LoadingScreen _loadingMenu;
+        private string _currentSceneName;
+
+        public void Initialize(LoadingScreen loadingMenu)
+        {
+            _loadingMenu = loadingMenu;
+
+            _gameScenes = new GameScenes();
+        }
+
+        public void LoadSplashScreen()
+        {
+            _currentSceneName = _gameScenes.SplashScreen;
+
+            SceneManager.LoadSceneAsync(_currentSceneName, LoadSceneMode.Additive);
+        }
+
+        public void LoadMainMenu()
+        {
+            StartCoroutine(LoadScene(_gameScenes.MainMenu, _mainMenuLoadingTime));
+        }
+
+        public void LoadLevel(int levelNumber)
+        {
+            StartCoroutine(LoadScene(_gameScenes.Levels[levelNumber - 1], _gameplayLoadingTime));
+        }
+
+        public void RestartGameplayScene()
+        {
+            StartCoroutine(LoadScene(_currentSceneName, _gameplayLoadingTime));
+        }
+
+        private IEnumerator LoadScene(string sceneName, float loadingTime)
+        {
+            _loadingMenu.gameObject.SetActive(true);
+            _loadingMenu.Appear();
+
+            yield return new WaitWhile(() => _loadingMenu.IsAppearing == true);
+
+            yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+            if (_currentSceneName != null)
+                SceneManager.UnloadSceneAsync(_currentSceneName);
+
+            _currentSceneName = sceneName;
+
+            yield return new WaitForSeconds(loadingTime);
+            _loadingMenu.Disapear();
+        }
     }
-
-    public void LoadSceneWithOutLoadingScreen(string sceneName)
-    {
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-    }
-
-    public void LoadSceneWithLoadingScreen(string sceneName, float loadingTime)
-    {
-        StartCoroutine(LoadScene(sceneName, loadingTime));
-    }
-
-    public void RestartSceneWithLoadingScreen(float restartingTime)
-    {
-        StartCoroutine(LoadScene(_currentSceneName, restartingTime));
-    }
-
-    private IEnumerator LoadScene(string sceneName, float loadingTime)
-    {
-        _loadingMenu.gameObject.SetActive(true);
-        _loadingMenu.Appear();
-
-        yield return new WaitWhile(() => _loadingMenu.IsAppearing == true);
-
-        if (_currentSceneName != null)
-            SceneManager.UnloadSceneAsync(_currentSceneName);
-
-        yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
-        _currentSceneName = sceneName;
-
-        yield return new WaitForSeconds(loadingTime);
-        _loadingMenu.Disapear();
-    }    
 }

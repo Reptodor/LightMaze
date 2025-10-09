@@ -1,4 +1,5 @@
 using System.Collections;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class MainMenuBootstrap : MonoBehaviour
@@ -11,7 +12,6 @@ public class MainMenuBootstrap : MonoBehaviour
     {
         StartCoroutine(nameof(Initialize));
     }
-
 
     public virtual IEnumerator Initialize()
     {

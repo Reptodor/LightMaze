@@ -4,6 +4,9 @@ using UnityEngine.Rendering.Universal;
 public class GroundTorch : MonoBehaviour
 {
     [SerializeField] private Light2D _flame;
+    [SerializeField] private FlameAnimationsConfig _flameAnimationsConfig;
+    [SerializeField] private ShakeAnimationConfig _shakeAnimationConfig;
+
     private ShakeAnimationHandler _shakeAnimationHandler;
     private FlameAnimationsHandler _flameAnimationsHandler;
     private bool _isActivated = false;
@@ -17,12 +20,12 @@ public class GroundTorch : MonoBehaviour
     }
 
 
-    public virtual void Initialize(FlameAnimationsConfig flameAnimationsConfig, ShakeAnimationConfig shakeAnimationConfig)
+    private void Awake()
     {
         _flame.gameObject.SetActive(false);
-        _shakeAnimationHandler = new ShakeAnimationHandler(shakeAnimationConfig, transform);
+        _shakeAnimationHandler = new ShakeAnimationHandler(_shakeAnimationConfig, transform);
         _shakeAnimationHandler.Start();
-        _flameAnimationsHandler = new FlameAnimationsHandler(flameAnimationsConfig, _flame);
+        _flameAnimationsHandler = new FlameAnimationsHandler(_flameAnimationsConfig, _flame);
 
         _isInitialized = true;
         OnEnable();

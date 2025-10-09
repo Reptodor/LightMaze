@@ -4,6 +4,7 @@ using UnityEngine;
 public class SecondLevelBootstrap : FirtsLevelBootstrap
 {
     [Header("Keys")]
+    [SerializeField] private Key[] _keys;
     [SerializeField] private KeyMapHandler _keyMapHandler;
 
     public override IEnumerator Initialize()
@@ -12,7 +13,6 @@ public class SecondLevelBootstrap : FirtsLevelBootstrap
 
         yield return null;
 
-        _keyMapHandler.Initialize(Keys, ShakeAnimationConfig);
-
+        _keyMapHandler.Initialize(_keys);
     }
 }

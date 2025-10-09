@@ -1,4 +1,5 @@
 using System.Collections;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class HealthPresenter
@@ -58,7 +59,7 @@ public class HealthPresenter
 
         yield return new WaitForSeconds(_deathTime);
 
-        _sceneLoader.RestartSceneWithLoadingScreen(_sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime);
+        _sceneLoader.RestartGameplayScene();
         Coroutines.StopRoutine(_coroutine);
     }
 }

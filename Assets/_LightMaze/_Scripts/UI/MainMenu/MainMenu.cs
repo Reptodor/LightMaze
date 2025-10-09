@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,15 +39,14 @@ public class MainMenu : MonoBehaviour
         if (!_isInitialized)
             return;
 
-        _sceneLoader.LoadSceneWithOutLoadingScreen(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
-
         _hasLoadingStarted = false;
+        SceneManager.LoadSceneAsync("UiBackground", LoadSceneMode.Additive);
         Show();
     }
 
     private void OnDisable()
     {
-        SceneManager.UnloadSceneAsync(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
+        SceneManager.UnloadSceneAsync("UiBackground");
     }
 
     public void Play()
@@ -90,7 +90,6 @@ public class MainMenu : MonoBehaviour
                 Append(_buttons[1].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
                 AppendInterval(_mainMenuConfig.Interval).
                 Append(_buttons[2].transform.DOScale(0, _mainMenuConfig.AppearanceDuration).From(_mainMenuConfig.ButtonsSize).SetEase(Ease.InBack)).
-                AppendCallback(() => _sceneLoader.LoadSceneWithLoadingScreen(
-                    _sceneLoader.SceneNamesConfig.GameplayScenesNames[0], _sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime));
+                AppendCallback(() => _sceneLoader.LoadLevel(1));
     }
 }

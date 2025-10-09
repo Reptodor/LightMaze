@@ -1,4 +1,5 @@
 using System;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
@@ -22,10 +23,17 @@ public class PauseMenu : MonoBehaviour
 
     public void OnPauseMenuKeyPressed()
     {
-        
-        _pauseMenuPanel.SetActive(true);
-        Time.timeScale = 0f;
-        
+        if (!_isActive)
+        {
+            _pauseMenuPanel.SetActive(true);
+            _isActive = true;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            _isActive = false;
+            Resume();
+        }
     }
 
     public void Resume()
@@ -42,7 +50,6 @@ public class PauseMenu : MonoBehaviour
     public void BackToMainMenu()
     {
         Time.timeScale = 1f;
-        _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.MainMenuSceneName,
-                                                _sceneLoader.ScenesLoadingTimeConfig.MainMenuSceneLoadingTime);
+        _sceneLoader.LoadMainMenu();
     }
 }

@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class KeyMapHandler : MonoBehaviour
 {
+    [SerializeField] ShakeAnimationConfig _shakeAnimationConfig;
+    
     private Key[] _keys;
     private ShakeAnimationHandler _shakeAnimationHandler;
     private bool _isInitialized = false;
 
-    public void Initialize(Key[] keys, ShakeAnimationConfig shakeAnimationConfig)
+    public void Initialize(Key[] keys)
     {
         _keys = keys;
-        _shakeAnimationHandler = new ShakeAnimationHandler(shakeAnimationConfig, transform);
+        _shakeAnimationHandler = new ShakeAnimationHandler(_shakeAnimationConfig, transform);
 
         _isInitialized = true;
         OnEnable();

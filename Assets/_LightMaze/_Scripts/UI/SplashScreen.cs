@@ -1,8 +1,9 @@
+using LightMaze._Scripts.SceneLoader;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BootMenu : MonoBehaviour
+public class SplashScreen : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private TextBlinkingConfig _textBlinkingConfig;
@@ -26,17 +27,15 @@ public class BootMenu : MonoBehaviour
         if (!_isInitialized)
             return;
 
-        _sceneLoader.LoadSceneWithOutLoadingScreen(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
-
+        SceneManager.LoadSceneAsync("UiBackground", LoadSceneMode.Additive);
         _textBlinking.OnEnable();
         _hasLoadingStarted = false;
     }
 
     private void OnDisable()
     {
+        SceneManager.UnloadSceneAsync("UiBackground");
         _textBlinking.OnDisable();
-
-        SceneManager.UnloadSceneAsync(_sceneLoader.SceneNamesConfig.BootAndMainMenuBackgroundSceneName);
     }
 
     private void Update()
@@ -44,8 +43,7 @@ public class BootMenu : MonoBehaviour
         if (Input.anyKeyDown && !_hasLoadingStarted)
         {
             _hasLoadingStarted = true;
-            _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.MainMenuSceneName,
-                                                    _sceneLoader.ScenesLoadingTimeConfig.MainMenuSceneLoadingTime);
+            _sceneLoader.LoadMainMenu();
         }
     }
 }

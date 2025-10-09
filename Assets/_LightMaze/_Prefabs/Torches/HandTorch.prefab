@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _handTorchConfig: {fileID: 11400000, guid: 0018644a0e932403e878007d604856d8, type: 2}
+  _flameAnimationsConfig: {fileID: 11400000, guid: 96caaae33932a41a8bc34518c41e39ee, type: 2}
   _flame: {fileID: 7748956698512437597}
 --- !u!1 &5324056090021828814
 GameObject:

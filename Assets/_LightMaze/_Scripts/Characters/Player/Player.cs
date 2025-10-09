@@ -1,5 +1,6 @@
 using System;
 using Cinemachine;
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable

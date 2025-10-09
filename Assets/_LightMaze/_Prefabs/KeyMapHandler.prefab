@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5520f82bd1343c9819ddd8e51647b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shakeAnimationConfig: {fileID: 11400000, guid: 3e330485f4feb42e39bdefef26476e75, type: 2}
 --- !u!61 &210344379456276698
 BoxCollider2D:
   m_ObjectHideFlags: 0

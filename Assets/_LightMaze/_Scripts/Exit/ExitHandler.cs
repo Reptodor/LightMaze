@@ -1,3 +1,4 @@
+using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
 
 public class ExitHandler : MonoBehaviour
@@ -5,6 +6,8 @@ public class ExitHandler : MonoBehaviour
     [SerializeField] private int _nextGameplaySceneNumber;
     private SceneLoader _sceneLoader;
     private QuestHandler _questHandler;
+
+    private bool _isFinished;
 
     public void Initialize(SceneLoader sceneLoader, QuestHandler questHandler)
     {
@@ -14,25 +17,26 @@ public class ExitHandler : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Player player = other.GetComponent<Player>();
+        if (_isFinished)
+            return;
 
-        if(player != null)
-        {
-            if(_questHandler.CurrentQuest.GetType() == typeof(ExitQuest))
+        if (other.TryGetComponent(out Player player))
             {
-                _questHandler.CurrentQuest.Complete();
+                if (_questHandler.CurrentQuest.GetType() == typeof(ExitQuest))
+                {
+                    _questHandler.CurrentQuest.Complete();
+                }
+                if (player.BagHandler.IsEnoughKeys())
+                {
+                    _questHandler.CurrentQuest.Complete();
+                    _isFinished = true;
+                    FinishLevel();
+                }
             }
-            if(player.BagHandler.IsEnoughKeys())
-            {
-                _questHandler.CurrentQuest.Complete();
-                FinishLevel();
-            }
-        }
     }
 
     private void FinishLevel()
     {
-        _sceneLoader.LoadSceneWithLoadingScreen(_sceneLoader.SceneNamesConfig.GameplayScenesNames[_nextGameplaySceneNumber],
-                                                _sceneLoader.ScenesLoadingTimeConfig.GameplayScenesLoadingTime);
+        _sceneLoader.LoadLevel(_nextGameplaySceneNumber);
     }
 }

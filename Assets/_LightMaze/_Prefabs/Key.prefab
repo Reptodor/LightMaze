@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _light2D: {fileID: 6188424902298457505}
+  _shakeAnimationConfig: {fileID: 11400000, guid: 3e330485f4feb42e39bdefef26476e75, type: 2}
 --- !u!61 &2584452355758072570
 BoxCollider2D:
   m_ObjectHideFlags: 0

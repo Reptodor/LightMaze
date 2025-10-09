@@ -190,7 +190,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ec2204c26954482ea9b0366e4ca193c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flame: {fileID: 856152310527523277}
+  _flame: {fileID: 856152310527523277}
+  _flameAnimationsConfig: {fileID: 11400000, guid: 96caaae33932a41a8bc34518c41e39ee, type: 2}
+  _shakeAnimationConfig: {fileID: 11400000, guid: 3e330485f4feb42e39bdefef26476e75, type: 2}
 --- !u!1 &3602977564630369232
 GameObject:
   m_ObjectHideFlags: 0
