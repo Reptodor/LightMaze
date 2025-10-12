@@ -10,7 +10,9 @@ public class HealthView : MonoBehaviour
     [SerializeField] private HealthConfig _healthConfig;
     [SerializeField] private CameraShake _cameraShake;
     [SerializeField] private Image _barFilling;
+
     private Color _effectColor;
+    private Sequence _animation; 
 
     private void OnValidate()
     {
@@ -62,6 +64,9 @@ public class HealthView : MonoBehaviour
 
     private void ShowEffect()
     {
-        _playerSpriteRenderer.DOColor(_effectColor, _healthConfig.HitAnimationDuration).SetLoops(2, LoopType.Yoyo);
+        _animation = DOTween.Sequence();
+
+        _animation.Append(_playerSpriteRenderer.DOColor(Color.red, _healthConfig.HitAnimationDuration))
+                  .Append(_playerSpriteRenderer.DOColor(Color.white, _healthConfig.HitAnimationDuration));
     }
 }
