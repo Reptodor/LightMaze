@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class TeleportAbilityPresenter
 {
-    private TeleportAbilityView _view;
-    private AbilityModel _model;
+    private readonly TeleportAbilityView _view;
+    private readonly AbilityModel _model;
 
-    private LayerMask _obstacleLayer;
-    private Rigidbody2D _rigidbody2D;
+    private readonly LayerMask _obstacleLayer;
+    private readonly Rigidbody2D _rigidbody2D;
+    private readonly float _teleportDistance = 5f;
+
+    private const float _collisionOffset = 0.5f;
+
     private Vector2 _moveDirection;
-
-    private float _teleportDistance = 5f;
 
     public TeleportAbilityPresenter(TeleportAbilityView teleportAbilityView, AbilityModel teleportAbilityModel, LayerMask obstacleLayer,
                                     Rigidbody2D rigidbody2D, float teleportDistance)
@@ -55,6 +57,7 @@ public class TeleportAbilityPresenter
         if (_model.IsAbilityActive)
         {
             _view.PlayTeleportSound();
+            _view.ShowDustParticle();
             PerformTeleport();
         }
     }
@@ -62,12 +65,12 @@ public class TeleportAbilityPresenter
     private void PerformTeleport()
     {
         Vector2 targetPosition = _rigidbody2D.position + _moveDirection * _teleportDistance;
-        
+
         RaycastHit2D hit = Physics2D.Raycast(_rigidbody2D.position, _moveDirection, _teleportDistance, _obstacleLayer);
-        
+
         if (hit.collider != null)
         {
-            targetPosition = hit.point - _moveDirection * 0.5f;
+            targetPosition = hit.point - _moveDirection * _collisionOffset;
         }
         
         _rigidbody2D.position = targetPosition;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimationSwitchingHandler
 {
-    private Animator _animator;
+    private readonly Animator _animator;
     private string _currentAnimationName;
 
     public AnimationSwitchingHandler(Animator animator)

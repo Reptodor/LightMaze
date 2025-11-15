@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class RotationHandler
 {
-    private Transform _transform;
-    private Vector3 _startScale;
+    private readonly Transform _transform;
+    private readonly Vector3 _startScale;
 
     public RotationHandler(Transform transform)
     {

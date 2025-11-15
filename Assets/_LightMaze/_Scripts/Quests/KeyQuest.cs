@@ -2,8 +2,8 @@ using TMPro;
 
 public class KeyQuest : IQuest
 {
-    private TextMeshProUGUI _text;
-    private BagHandler _bag;
+    private readonly TextMeshProUGUI _text;
+    private readonly BagHandler _bag;
 
     public KeyQuest(TextMeshProUGUI text, BagHandler bag)
     {

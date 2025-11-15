@@ -2,7 +2,7 @@ using TMPro;
 
 public class FinishQuest : IQuest
 {
-    private TextMeshProUGUI _text;
+    private readonly TextMeshProUGUI _text;
     private bool _isCompleted;
 
     public FinishQuest(TextMeshProUGUI text)

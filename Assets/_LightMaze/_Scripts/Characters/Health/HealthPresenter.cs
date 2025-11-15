@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class HealthPresenter
 {
-    private HealthView _healthView;
-    private HealthModel _healthModel;
+    private readonly HealthView _healthView;
+    private readonly HealthModel _healthModel;
 
-    private SceneLoader _sceneLoader;
-    private AnimationSwitchingHandler _animationSwitchingHandler;
+    private readonly SceneLoader _sceneLoader;
+    private readonly AnimationSwitchingHandler _animationSwitchingHandler;
+    private readonly float _deathTime;
+    
     private Coroutine _coroutine;
-    private float _deathTime;
     private bool _isAlive = true;
 
     public bool IsAlive => _isAlive;

@@ -8,7 +8,7 @@ public class MovementHandler
     private readonly AudioSource _audioSource;
 
     private float _speed;
-    public float Speed => _movementConfig.Speed;
+    public float BaseSpeed => _movementConfig.Speed;
 
     public MovementHandler(MovementConfig movementConfig, Rigidbody2D rigidbody2D, AudioSource audioSource)
     {

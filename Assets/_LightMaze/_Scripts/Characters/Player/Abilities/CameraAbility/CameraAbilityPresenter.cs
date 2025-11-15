@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class CameraAbilityPresenter
 {
-    private CameraAbilityView _view;
-    private AbilityModel _model;
-    private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
-
+    private readonly CameraAbilityView _view;
+    private readonly AbilityModel _model;
+    private readonly CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
 
     public CameraAbilityPresenter(CameraAbilityView cameraAbilityView, AbilityModel cameraAbilityModel,
                                   CinemachineVirtualCamera unfollowingCinemachineVirtualCamera)

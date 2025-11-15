@@ -9,6 +9,10 @@ public class TeleportAbilityView : MonoBehaviour
     [SerializeField] private Image _cooldownOverlay;
     [SerializeField] private AudioSource _teleportAudioSource;
     [SerializeField] private TextMeshProUGUI _keyText;
+    [SerializeField] private ParticleSystem _dustParticlePrefab;
+
+    private Player _player;
+    private ParticleSystem _dustParticle;
 
     private const float _fillAmountAtStartOfShowing = 1f;
 
@@ -29,10 +33,12 @@ public class TeleportAbilityView : MonoBehaviour
             throw new ArgumentNullException(nameof(_keyText), "Key text cannot be null");
     }
 
-    public void Initialize(KeyCode teleportAbilityKey)
+    public void Initialize(KeyCode teleportAbilityKey, Player player)
     {
         _keyText.text = teleportAbilityKey.ToString();
         _abilityButton.onClick.AddListener(() => AbilityRequested?.Invoke());
+
+        _player = player;
     }
 
     public void OnTeleportAbilityKeyPressed()
@@ -53,5 +59,13 @@ public class TeleportAbilityView : MonoBehaviour
     public void PlayTeleportSound()
     {
         _teleportAudioSource.Play();
+    }
+
+    public void ShowDustParticle()
+    {
+        if(_dustParticle == null)
+            _dustParticle = Instantiate(_dustParticlePrefab);
+        _dustParticle.transform.position = _player.transform.position;
+        _dustParticle.Play();
     }
 }

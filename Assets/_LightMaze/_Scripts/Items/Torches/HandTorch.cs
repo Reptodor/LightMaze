@@ -15,7 +15,6 @@ public class HandTorch : MonoBehaviour
 
     private FlameAnimationsHandler _flameAnimationsHandler;
     private Player _player;
-    private Vector2 _lastValidPosition;
     private float _angle = 0;
     private bool _isInitialized = false;
 
@@ -31,7 +30,6 @@ public class HandTorch : MonoBehaviour
     public void Initialize(Player player)
     {
         _player = player;
-        _lastValidPosition = transform.position;
 
         _flameAnimationsHandler = new FlameAnimationsHandler(_flameAnimationsConfig, _flame);
         _flameAnimationsHandler.HandleActivationAnimation();

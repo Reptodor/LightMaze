@@ -11,7 +11,6 @@ public class Player : MonoBehaviour, IDamagable
 
     [Header("Animation")]
     [SerializeField] private Animator _animator;
-    [SerializeField] private SpriteRenderer _spriteRenderer;
     private AnimationHandler _animationHandler;
     private AnimationSwitchingHandler _animationSwitchingHandler;
 
@@ -24,6 +23,9 @@ public class Player : MonoBehaviour, IDamagable
 
     [Header("Bag")]
     private BagHandler _bagHandler;
+
+    [Header("HandTorch")]
+    [SerializeField] private HandTorch _handTorch;
 
     [Header("Health")]
     [SerializeField] private HealthConfig _healthConfig;
@@ -47,11 +49,12 @@ public class Player : MonoBehaviour, IDamagable
     [Header("CameraAbility")]
     [SerializeField] private CameraAbilityConfig _cameraAbilityConfig;
     [SerializeField] private CameraAbilityView _cameraAbilityView;
-    [SerializeField] private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
+    private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
     private CameraAbilityPresenter _cameraAbilityPresenter;
 
     private PauseMenu _pauseMenu;
     private bool _isInitialized;
+    private bool _isStopped;
 
     public BagHandler BagHandler => _bagHandler;
     public InputSystem InputSystem => _inputSystem;
@@ -69,9 +72,6 @@ public class Player : MonoBehaviour, IDamagable
 
         if (_animator == null)
             throw new ArgumentNullException(nameof(_animator), "Animator cannot be null");
-
-        if (_spriteRenderer == null)
-            throw new ArgumentNullException(nameof(_spriteRenderer), "SpriteRenderer cannot be null");
 
         if (_rigidbody2D == null)
             throw new ArgumentNullException(nameof(_rigidbody2D), "Rigidbody2D cannot be null");
@@ -105,22 +105,22 @@ public class Player : MonoBehaviour, IDamagable
 
         if (_cameraAbilityView == null)
             throw new ArgumentNullException(nameof(_cameraAbilityView), "CameraAbilityView cannot be null");
-
-        if (_unfollowingCinemachineVirtualCamera == null)
-            throw new ArgumentNullException(nameof(_unfollowingCinemachineVirtualCamera), "UnfollowingCinemachineVirtualCamera cannot be null");
     }
 
-    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, LevelConfig levelConfig, PauseMenu pauseMenu)
+    public void Initialize(GameObject spikesTilemap, SceneLoader sceneLoader, LevelConfig levelConfig, CameraShake cameraShake,
+                           PauseMenu pauseMenu, CinemachineVirtualCamera unfollowingCinemachineVirtualCamera)
     {
         InitializeMovement(_movementConfig);
+        _handTorch.Initialize(this);
 
         _animationSwitchingHandler = new AnimationSwitchingHandler(_animator);
         _bagHandler = new BagHandler(levelConfig.KeysCount, spikesTilemap);
         _animationHandler = new AnimationHandler(_movementHandler, _animationSwitchingHandler, _orientationHandler);
         _inputSystem = new InputSystem(_inputConfig);
         _pauseMenu = pauseMenu;
+        _unfollowingCinemachineVirtualCamera = unfollowingCinemachineVirtualCamera;
 
-        InitializeHealth(sceneLoader);
+        InitializeHealth(sceneLoader, cameraShake);
         InitializeSpeedAbility();
         InitializeDashAbility();
         InitializeCameraAbility();
@@ -136,9 +136,10 @@ public class Player : MonoBehaviour, IDamagable
         _rotationHandler = new RotationHandler(transform);
     }
 
-    private void InitializeHealth(SceneLoader sceneLoader)
+    private void InitializeHealth(SceneLoader sceneLoader, CameraShake cameraShake)
     {
         HealthModel healthModel = new HealthModel(_healthConfig.MaxHealth);
+        _healthView.Initialize(cameraShake);
         _healthPresenter = new HealthPresenter(healthModel, _healthView, sceneLoader, _animationSwitchingHandler, _healthConfig.DeathTime);
     }
 
@@ -151,7 +152,7 @@ public class Player : MonoBehaviour, IDamagable
 
     private void InitializeDashAbility()
     {
-        _teleportAbilityView.Initialize(_inputSystem.TeleportAbilityKey);
+        _teleportAbilityView.Initialize(_inputSystem.TeleportAbilityKey, this);
         AbilityModel dashAbilityModel = new AbilityModel(_teleportAbilityConfig.Duration, _teleportAbilityConfig.Cooldown);
         _teleportAbilityPresenter = new TeleportAbilityPresenter(_teleportAbilityView, dashAbilityModel, _teleportAbilityConfig.ObstacleLayer, _rigidbody2D, _teleportAbilityConfig.TeleportDistance);
     }
@@ -218,7 +219,7 @@ public class Player : MonoBehaviour, IDamagable
         if (!_isInitialized)
             return;
 
-        if (!_healthPresenter.IsAlive)
+        if (!_healthPresenter.IsAlive || _isStopped)
         {
             _movementHandler.HandleMovementWithSound(Vector2.zero);
             return;
@@ -228,13 +229,9 @@ public class Player : MonoBehaviour, IDamagable
         _rotationHandler.HandleRotation(_inputSystem.GetMoveDirection());
     }
 
-    public void TakeDamage(int damage)
-    {
-        Damaged?.Invoke(damage);
-    }
+    public bool IsStopped(bool isStopped) => _isStopped = isStopped;
 
-    public void Heal(int healAmount)
-    {
-        Healed?.Invoke(healAmount);
-    }
+    public void TakeDamage(int damage) => Damaged?.Invoke(damage);
+
+    public void Heal(int healAmount) => Healed?.Invoke(healAmount);
 }   

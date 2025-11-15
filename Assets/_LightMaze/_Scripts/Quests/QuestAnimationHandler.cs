@@ -5,14 +5,14 @@ using System;
 
 public class QuestAnimationHandler
 {
-    private QuestAnimationHandlerConfig _questAnimationHandlerConfig;
-    private TextMeshProUGUI _text;
-    private Vector3 _startPosition;
+    private readonly QuestAnimationHandlerConfig _questAnimationHandlerConfig;
+    private readonly TextMeshProUGUI _text;
+    private readonly Vector3 _startPosition;
+
     private Sequence _complitingSequence;
     private Sequence _appearingSequence;
     private bool _isAnimating;
 
-    public bool IsAnimating => _isAnimating;
     public event Action AppearingAnimationCompleted;
 
     public QuestAnimationHandler(QuestAnimationHandlerConfig questAnimationHandlerConfig, TextMeshProUGUI text, Vector3 startPosition)

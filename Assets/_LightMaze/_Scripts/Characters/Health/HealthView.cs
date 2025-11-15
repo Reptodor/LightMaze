@@ -8,10 +8,10 @@ public class HealthView : MonoBehaviour
     [SerializeField] private SpriteRenderer _playerSpriteRenderer;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private HealthConfig _healthConfig;
-    [SerializeField] private CameraShake _cameraShake;
     [SerializeField] private Image _barFilling;
 
-    private Color _effectColor;
+    private CameraShake _cameraShake;
+    private Color _effectColor = Color.white;
     private Sequence _animation; 
 
     private void OnValidate()
@@ -25,11 +25,13 @@ public class HealthView : MonoBehaviour
         if (_healthConfig == null)
             throw new ArgumentNullException(nameof(_healthConfig), "HealthConfig cannot be null");
 
-        if (_cameraShake == null)
-            throw new ArgumentNullException(nameof(_cameraShake), "Camera shake cannot be null");
-
         if (_barFilling == null)
             throw new ArgumentNullException(nameof(_barFilling), "HealthBarFilling cannot be null");
+    }
+
+    public void Initialize(CameraShake cameraShake)
+    {
+        _cameraShake = cameraShake;
     }
 
     public void OnHealthChanged(float healthPercentage, string changeTypeName)
@@ -49,7 +51,7 @@ public class HealthView : MonoBehaviour
 
         UpdateHealthUI(healthPercentage);
         PlaySound();
-        ShowEffect();
+        ShowEffect(_effectColor);
     }
 
     private void UpdateHealthUI(float healthPercentage)
@@ -62,11 +64,11 @@ public class HealthView : MonoBehaviour
         _audioSource.Play();
     }
 
-    private void ShowEffect()
+    private void ShowEffect(Color effectColor)
     {
         _animation = DOTween.Sequence();
 
-        _animation.Append(_playerSpriteRenderer.DOColor(Color.red, _healthConfig.HitAnimationDuration))
+        _animation.Append(_playerSpriteRenderer.DOColor(effectColor, _healthConfig.HitAnimationDuration))
                   .Append(_playerSpriteRenderer.DOColor(Color.white, _healthConfig.HitAnimationDuration));
     }
 }

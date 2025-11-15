@@ -5,10 +5,11 @@ using UnityEngine.Rendering.Universal;
 
 public class FlameAnimationsHandler
 {
-    private FlameAnimationsConfig _config;
-    private Light2D _flame;
+    private readonly FlameAnimationsConfig _config;
+    private readonly Light2D _flame;
+    private readonly float _totalTime;
+    
     private float _currentTime;
-    private float _totalTime;
 
     public event Action FlameActivated;
 

@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class AnimationHandler 
 {
-    private MovementHandler _movementHandler;
-    private AnimationSwitchingHandler _animationSwitchingHandler;
-    private OrientationHandler _orientationHandler;
+    private readonly MovementHandler _movementHandler;
+    private readonly AnimationSwitchingHandler _animationSwitchingHandler;
+    private readonly OrientationHandler _orientationHandler;
     private string _orientationName;
 
     public AnimationHandler(MovementHandler movementHandler, AnimationSwitchingHandler animationSwitchingHandler,

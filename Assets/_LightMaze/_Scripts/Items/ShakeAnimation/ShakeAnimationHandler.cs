@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ShakeAnimationHandler
 {
-    private ShakeAnimationConfig _shakeAnimationConfig;
-    private Transform _transform;
+    private readonly ShakeAnimationConfig _shakeAnimationConfig;
+    private readonly Transform _transform;
     private Sequence _animation;
 
     public ShakeAnimationHandler(ShakeAnimationConfig shakeAnimationConfig, Transform transform)

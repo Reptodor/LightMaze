@@ -1,16 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using LightMaze._Scripts.SceneLoader;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class FirtsLevelBootstrap : MonoBehaviour
 {
+    [Header("GlobalLight")]
+    [SerializeField] private Light2D _globalLight;
+
     [Header("Level")]
     [SerializeField] private LevelConfig _levelConfig;
 
     [Header("Player components")]
-    [SerializeField] private Player _player;
+    [SerializeField] private Transform _spawnpoint;
+    [SerializeField] private Player _playerPrefab;
     [SerializeField] private GameObject _spikesTilemap;
+    private Player _player;
+
+    [Header("Camera")]
+    [SerializeField] private CinemachineVirtualCamera _followingCinemachineVirtualCamera;
+    [SerializeField] private CinemachineVirtualCamera _unfollowingCinemachineVirtualCamera;
+    [SerializeField] private CameraShake _cameraShake;
 
     [Header("Quests")]
     [SerializeField] private QuestHandler _questHandler;
@@ -19,9 +30,6 @@ public class FirtsLevelBootstrap : MonoBehaviour
     [Header("Exit")]
     [SerializeField] private ExitHandler _exitHandler;
     private SceneLoader _sceneLoader;
-
-    [Header("Torch")]
-    [SerializeField] private HandTorch _baseTorch;
 
     [Header("Slimes")]
     [SerializeField] private Slime[] _slimes;
@@ -40,6 +48,8 @@ public class FirtsLevelBootstrap : MonoBehaviour
     {
         _sceneLoader = FindAnyObjectByType<SceneLoader>();
 
+        _globalLight.intensity = 0f;
+
         yield return null;
 
         PauseMenu pauseMenu = Instantiate(_pauseMenuPrefab, _interfaceParent);
@@ -48,11 +58,13 @@ public class FirtsLevelBootstrap : MonoBehaviour
 
         yield return null;
 
-        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig, pauseMenu);
+        _player = Instantiate(_playerPrefab);
+        _player.transform.position = _spawnpoint.position;
+        _player.Initialize(_spikesTilemap, _sceneLoader, _levelConfig, _cameraShake, pauseMenu, _unfollowingCinemachineVirtualCamera);
 
         yield return null;
 
-        _baseTorch.Initialize(_player);
+        _followingCinemachineVirtualCamera.Follow = _player.transform;
 
         yield return null;
 

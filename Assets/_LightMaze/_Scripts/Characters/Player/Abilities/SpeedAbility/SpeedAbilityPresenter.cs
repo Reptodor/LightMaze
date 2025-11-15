@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class SpeedAbilityPresenter
 {
-    private SpeedAbilityView _view;
-    private AbilityModel _model;
-    private MovementHandler _playerMovementHandler;
+    private readonly SpeedAbilityView _view;
+    private readonly AbilityModel _model;
+    private readonly MovementHandler _playerMovementHandler;
 
-    private float _boostPercent;
-    private float _defaultSpeed;
+    private readonly float _boostPercent;
+    private readonly float _defaultSpeed;
+    
     private float _currentBoostPercent;
 
     private const float _baseBoostPercent = 1f;
@@ -20,7 +21,7 @@ public class SpeedAbilityPresenter
         _boostPercent = boostPercent;
 
         _playerMovementHandler = playerMovementHandler;
-        _defaultSpeed = _playerMovementHandler.Speed;
+        _defaultSpeed = _playerMovementHandler.BaseSpeed;
     }
 
     public void Subscribe()
